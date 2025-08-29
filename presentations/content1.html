@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Splunk Fundamentals - Content 1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
+    <style>
+        .reveal h1, .reveal h2 {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .reveal .session-header {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .lab-callout {
+            background-color: #e3f2fd;
+            border: 3px solid #2196f3;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .code-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .key-concept {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>Splunk Fundamentals</h1>
+                <h2>Content 1</h2>
+                <p>Introduction to Splunk and Basic Search Operations</p>
+                <p><em>Foundation Skills for Data Analysis</em></p>
+            </section>
+
+            <!-- Course Overview -->
+            <section>
+                <h2 class="session-header">Course Overview</h2>
+                <ul>
+                    <li><strong>Duration:</strong> 2-day intensive course</li>
+                    <li><strong>Focus:</strong> Hands-on practical learning</li>
+                    <li><strong>Environment:</strong> Individual Splunk instances</li>
+                    <li><strong>Scenario:</strong> Buttercup Games company data</li>
+                </ul>
+                <div class="key-concept">
+                    <p><strong>Learning Approach:</strong> Progressive skill building from data loading through advanced analytics</p>
+                </div>
+            </section>
+
+            <!-- Content 1 Learning Objectives -->
+            <section>
+                <h2 class="session-header">Content 1 Learning Objectives</h2>
+                <p>By the end of this section, you will be able to:</p>
+                <ul>
+                    <li>Understand Splunk architecture and components</li>
+                    <li>Load and configure data sources</li>
+                    <li>Perform basic searches using SPL</li>
+                    <li>Work with fields and filters</li>
+                    <li>Use fundamental Splunk commands</li>
+                    <li>Apply search best practices</li>
+                </ul>
+            </section>
+
+            <!-- What is Splunk? -->
+            <section>
+                <h2 class="session-header">What is Splunk?</h2>
+                <div class="key-concept">
+                    <p><strong>Splunk</strong> is a platform for searching, monitoring, and analyzing machine-generated data</p>
+                </div>
+                <ul>
+                    <li><strong>Universal Data Platform:</strong> Ingests any machine data</li>
+                    <li><strong>Real-time Analysis:</strong> Search and analyze data as it arrives</li>
+                    <li><strong>Scalable:</strong> Handles massive volumes of data</li>
+                    <li><strong>Flexible:</strong> Supports structured and unstructured data</li>
+                </ul>
+            </section>
+
+            <!-- Machine Data Types -->
+            <section>
+                <h2 class="session-header">Machine Data Types</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Log Files</h3>
+                        <ul>
+                            <li>Web server logs</li>
+                            <li>Application logs</li>
+                            <li>Database logs</li>
+                            <li>Security logs</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Metrics & Events</h3>
+                        <ul>
+                            <li>Performance metrics</li>
+                            <li>System events</li>
+                            <li>Network traffic</li>
+                            <li>IoT sensor data</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Splunk Components -->
+            <section>
+                <h2 class="session-header">Splunk Architecture Components</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Indexer</h3>
+                        <p>Stores and processes data</p>
+                        <ul>
+                            <li>Data storage</li>
+                            <li>Index management</li>
+                            <li>Search execution</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Search Head</h3>
+                        <p>User interface and search coordination</p>
+                        <ul>
+                            <li>Web interface</li>
+                            <li>Search management</li>
+                            <li>Dashboards</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Forwarder</h3>
+                        <p>Data collection and forwarding</p>
+                        <ul>
+                            <li>Data input</li>
+                            <li>Parsing</li>
+                            <li>Forwarding</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Pipeline -->
+            <section>
+                <h2 class="session-header">Splunk Data Pipeline</h2>
+                <div style="text-align: center;">
+                    <div style="display: flex; justify-content: space-around; align-items: center; margin: 20px 0;">
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h3>1. Input</h3>
+                            <p>Data ingestion from various sources</p>
+                        </div>
+                        <div style="font-size: 2em;">→</div>
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h3>2. Parsing</h3>
+                            <p>Breaking data into events and extracting fields</p>
+                        </div>
+                        <div style="font-size: 2em;">→</div>
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h3>3. Indexing</h3>
+                            <p>Storing data for fast retrieval</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lab 1 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 1: Data Loading and Environment Setup</h2>
+                    <p><strong>Duration:</strong> 45 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Upload data files to Splunk Enterprise</li>
+                        <li>Configure source types for different data formats</li>
+                        <li>Set host field values for data identification</li>
+                        <li>Verify successful data ingestion</li>
+                    </ul>
+                    <p><strong>Scenario:</strong> Load Buttercup Games data sources for analysis</p>
+                </div>
+            </section>
+
+            <!-- Source Types -->
+            <section>
+                <h2 class="session-header">Understanding Source Types</h2>
+                <div class="key-concept">
+                    <p><strong>Source Type:</strong> Tells Splunk how to format and extract fields from data</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Common Source Types</h3>
+                        <ul>
+                            <li><code>access_combined</code> - Web logs</li>
+                            <li><code>linux_secure</code> - Security logs</li>
+                            <li><code>csv</code> - Comma-separated values</li>
+                            <li><code>json</code> - JSON formatted data</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Source Type Functions</h3>
+                        <ul>
+                            <li>Event breaking</li>
+                            <li>Timestamp recognition</li>
+                            <li>Field extraction</li>
+                            <li>Data formatting</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Interface Overview -->
+            <section>
+                <h2 class="session-header">Splunk Search Interface</h2>
+                <div class="key-concept">
+                    <p><strong>Search & Reporting App:</strong> Primary interface for data exploration</p>
+                </div>
+                <ul>
+                    <li><strong>Search Bar:</strong> Enter SPL commands</li>
+                    <li><strong>Time Range Picker:</strong> Specify search timeframe</li>
+                    <li><strong>Field Sidebar:</strong> Discovered fields and values</li>
+                    <li><strong>Results Panel:</strong> Search results and statistics</li>
+                    <li><strong>Job Inspector:</strong> Search performance details</li>
+                </ul>
+            </section>
+
+            <!-- Introduction to SPL -->
+            <section>
+                <h2 class="session-header">Search Processing Language (SPL)</h2>
+                <div class="key-concept">
+                    <p><strong>SPL:</strong> Splunk's search language for finding, filtering, and manipulating data</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Basic SPL Structure:</h3>
+                    <pre><code>
+search_terms | command1 | command2 | command3
+
+Examples:
+error | head 10
+status=404 | stats count by host
+index=web | where bytes > 1000 | table _time, host, bytes
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Search Components -->
+            <section>
+                <h2 class="session-header">SPL Search Components</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>Search Terms</h3>
+                        <ul>
+                            <li>Keywords: <code>error</code>, <code>failed</code></li>
+                            <li>Field values: <code>status=200</code></li>
+                            <li>Quoted phrases: <code>"login failed"</code></li>
+                            <li>Boolean operators: <code>AND</code>, <code>OR</code>, <code>NOT</code></li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Commands</h3>
+                        <ul>
+                            <li>Filtering: <code>where</code>, <code>search</code></li>
+                            <li>Field manipulation: <code>eval</code>, <code>rename</code></li>
+                            <li>Statistics: <code>stats</code>, <code>chart</code></li>
+                            <li>Formatting: <code>table</code>, <code>sort</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lab 2 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 2: Basic Searching with SPL</h2>
+                    <p><strong>Duration:</strong> 60 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Construct basic SPL searches</li>
+                        <li>Use search terms and filters</li>
+                        <li>Apply time range specifications</li>
+                        <li>Navigate search results</li>
+                        <li>Understand search modes</li>
+                    </ul>
+                    <p><strong>Focus:</strong> Building foundation SPL skills</p>
+                </div>
+            </section>
+
+            <!-- Time Ranges -->
+            <section>
+                <h2 class="session-header">Working with Time Ranges</h2>
+                <div class="key-concept">
+                    <p><strong>Time Range:</strong> Specifies the time window for your search</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Common Time Ranges</h3>
+                        <ul>
+                            <li>Last 24 hours</li>
+                            <li>Last 7 days</li>
+                            <li>Last 30 days</li>
+                            <li>All time</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Time Modifiers</h3>
+                        <ul>
+                            <li><code>earliest=-1h</code> (1 hour ago)</li>
+                            <li><code>latest=now</code> (current time)</li>
+                            <li><code>earliest=-7d@d</code> (7 days ago at midnight)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 7: Search Best Practices Introduction -->
+            <section>
+                <h2 class="session-header">Module 7: Search Best Practices</h2>
+                <div class="key-concept">
+                    <p><strong>Goal:</strong> Fast, efficient, and accurate search results</p>
+                </div>
+                <p>Six fundamental best practices for optimal search performance:</p>
+                <ul>
+                    <li>Best Practice #1: Time is the most efficient filter</li>
+                    <li>Best Practice #2: Specify index values at beginning</li>
+                    <li>Best Practice #3: Include as many search terms as possible</li>
+                    <li>Best Practice #4: Use inclusion vs exclusion effectively</li>
+                    <li>Best Practice #5: Filter early in search pipeline</li>
+                    <li>Best Practice #6: Use wildcards properly</li>
+                </ul>
+            </section>
+
+            <!-- Best Practice #1: Time Filter -->
+            <section>
+                <h2 class="session-header">Best Practice #1: Time is Most Efficient Filter</h2>
+                <div class="key-concept">
+                    <p><strong>Principle:</strong> Always specify the shortest time range that meets your needs</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Inefficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Searching all time
+index=main error
+
+# Using overly broad time range
+earliest=-30d latest=now error
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Efficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Specific time window
+earliest=-1h latest=now index=main error
+
+# Business hours only
+earliest=-1d@8h latest=-1d@17h error
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Impact:</strong> Can improve search performance by 10x or more</p>
+            </section>
+
+            <!-- Best Practice #2: Index Specification -->
+            <section>
+                <h2 class="session-header">Best Practice #2: Specify Index Values</h2>
+                <div class="key-concept">
+                    <p><strong>Principle:</strong> Always specify index names at the beginning of search</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Inefficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# No index specified
+error | stats count
+
+# Index specified too late
+error | where index="main"
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Efficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Index first
+index=main error | stats count
+
+# Multiple indexes if needed
+(index=web OR index=app) error
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Why:</strong> Reduces data set before processing begins</p>
+            </section>
+
+            <!-- Best Practice #3: Search Terms -->
+            <section>
+                <h2 class="session-header">Best Practice #3: Include Many Search Terms</h2>
+                <div class="key-concept">
+                    <p><strong>Principle:</strong> Use as many specific terms as possible early in search</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Inefficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Too generic
+index=main | where status="404"
+
+# Missing relevant terms
+index=web error
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Efficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Multiple specific terms
+index=main status=404 method=GET
+
+# Include context
+index=web error failed authentication
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Benefit:</strong> Filters data at index level before field extraction</p>
+            </section>
+
+            <!-- Best Practice #4: Inclusion vs Exclusion -->
+            <section>
+                <h2 class="session-header">Best Practice #4: Inclusion vs Exclusion</h2>
+                <div class="key-concept">
+                    <p><strong>Principle:</strong> Use inclusion (what you want) rather than exclusion (what you don't want)</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Less Efficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Excluding many values
+index=main NOT (status=200 OR status=201 
+OR status=202 OR status=304)
+
+# Using NOT extensively
+index=web NOT success NOT debug
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ More Efficient</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Include specific values
+index=main (status=404 OR status=500)
+
+# Positive matching
+index=web error failed exception
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Note:</strong> != vs NOT - Both exclude results, but != operates at field level</p>
+            </section>
+
+            <!-- != vs NOT Comparison -->
+            <section>
+                <h2 class="session-header">Understanding != vs NOT</h2>
+                <div class="key-concept">
+                    <p><strong>Key Difference:</strong> Field-level vs search-level exclusion</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>!= (Field Comparison)</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Excludes events where status field ≠ 200
+index=main status!=200
+
+# Only works with extracted fields
+index=web method!="POST"
+
+# Field must exist and not equal value
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>NOT (Search Term)</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Excludes events containing "200" anywhere
+index=main NOT 200
+
+# Works with any text in raw event
+index=web NOT POST
+
+# Broader exclusion scope
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Best Practice:</strong> Use != for precise field exclusion, NOT for broader text exclusion</p>
+            </section>
+
+            <!-- Best Practice #5: Filter Early -->
+            <section>
+                <h2 class="session-header">Best Practice #5: Filter Early in Pipeline</h2>
+                <div class="key-concept">
+                    <p><strong>Principle:</strong> Apply filters before expensive transforming commands</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Inefficient Order</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Filter after transformation
+index=main 
+| stats count by host, status 
+| where status=404
+
+# Search late in pipeline
+index=web 
+| eval response_time=duration/1000
+| search response_time > 5
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Efficient Order</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Filter first
+index=main status=404
+| stats count by host
+
+# Filter before transformation
+index=web duration > 5000
+| eval response_time=duration/1000
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Pipeline Order:</strong> Search terms → Filters → Transformations → Formatting</p>
+            </section>
+
+            <!-- Best Practice #6: Wildcards -->
+            <section>
+                <h2 class="session-header">Best Practice #6: Proper Wildcard Usage</h2>
+                <div class="key-concept">
+                    <p><strong>Principle:</strong> Use wildcards strategically - they can hurt or help performance</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Inefficient Wildcards</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Leading wildcards (very slow)
+index=main "*error"
+
+# Too broad matching
+index=web "*"
+
+# Unnecessary wildcards
+index=main "user*" (when you mean "user")
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Efficient Wildcards</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Trailing wildcards (faster)
+index=main "error*"
+
+# Specific patterns
+index=web "user_*_login"
+
+# Exact matches when possible
+index=main "error" (instead of "error*")
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Performance Impact:</strong> Leading wildcards can be 100x slower than trailing wildcards</p>
+            </section>
+
+            <!-- SPL Component Breakdown -->
+            <section>
+                <h2 class="session-header">SPL: Five Basic Components</h2>
+                <div class="key-concept">
+                    <p><strong>Understanding:</strong> Every SPL search contains up to five component types</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>1. Search Terms</h3>
+                        <p>Keywords, field=value pairs, quoted strings</p>
+                        <code>error status=404 "login failed"</code>
+                    </div>
+                    <div class="key-concept">
+                        <h3>2. Commands</h3>
+                        <p>Processing instructions that manipulate results</p>
+                        <code>stats, eval, where, sort</code>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+                    <div class="key-concept">
+                        <h3>3. Functions</h3>
+                        <p>Operations within commands</p>
+                        <code>count(), avg(), max()</code>
+                    </div>
+                    <div class="key-concept">
+                        <h3>4. Arguments</h3>
+                        <p>Values that modify command behavior</p>
+                        <code>limit=10, by host</code>
+                    </div>
+                    <div class="key-concept">
+                        <h3>5. Clauses</h3>
+                        <p>Modify how commands process data</p>
+                        <code>BY, AS, WHERE, OVER</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Pipeline Processing -->
+            <section>
+                <h2 class="session-header">Understanding Search Pipeline Processing</h2>
+                <div class="key-concept">
+                    <p><strong>Concept:</strong> Commands process data sequentially from left to right</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="display: flex; justify-content: space-around; align-items: center; margin: 20px 0;">
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h4>1. Search Terms</h4>
+                            <p><code>index=main error</code></p>
+                            <p>Filters raw events</p>
+                        </div>
+                        <div style="font-size: 1.5em;">→</div>
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h4>2. Field Extraction</h4>
+                            <p><code>| where status!=200</code></p>
+                            <p>Works with fields</p>
+                        </div>
+                        <div style="font-size: 1.5em;">→</div>
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h4>3. Processing</h4>
+                            <p><code>| stats count by host</code></p>
+                            <p>Transforms data</p>
+                        </div>
+                        <div style="font-size: 1.5em;">→</div>
+                        <div class="key-concept" style="flex: 1; margin: 5px;">
+                            <h4>4. Formatting</h4>
+                            <p><code>| sort count</code></p>
+                            <p>Presents results</p>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Key Point:</strong> Each stage processes output from previous stage</p>
+            </section>
+
+            <!-- Search Modes -->
+            <section>
+                <h2 class="session-header">Search Modes: Fast, Smart, Verbose</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Control search behavior and performance trade-offs</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Fast Mode</h3>
+                        <ul>
+                            <li>Minimum field extraction</li>
+                            <li>Best performance</li>
+                            <li>Statistics focus</li>
+                            <li>Default for transforming searches</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Smart Mode</h3>
+                        <ul>
+                            <li>Balanced approach</li>
+                            <li>Extracts needed fields</li>
+                            <li>Good for mixed searches</li>
+                            <li>Splunk decides optimization</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Verbose Mode</h3>
+                        <ul>
+                            <li>Full field extraction</li>
+                            <li>All events returned</li>
+                            <li>Interactive exploration</li>
+                            <li>Default for basic searches</li>
+                        </ul>
+                    </div>
+                </div>
+                <p><strong>Usage:</strong> Mode auto-selected based on search commands</p>
+            </section>
+
+            <!-- Time Range Abbreviations -->
+            <section>
+                <h2 class="session-header">Time Range Abbreviations</h2>
+                <div class="key-concept">
+                    <p><strong>Efficiency:</strong> Use abbreviated time formats for faster specification</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div>
+                        <h3>Time Units</h3>
+                        <ul>
+                            <li><code>s</code> = seconds</li>
+                            <li><code>m</code> = minutes</li>
+                            <li><code>h</code> = hours</li>
+                            <li><code>d</code> = days</li>
+                            <li><code>w</code> = weeks</li>
+                            <li><code>mon</code> = months</li>
+                            <li><code>y</code> = years</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Time Snap-to</h3>
+                        <ul>
+                            <li><code>@s</code> = snap to second</li>
+                            <li><code>@m</code> = snap to minute</li>
+                            <li><code>@h</code> = snap to hour</li>
+                            <li><code>@d</code> = snap to day</li>
+                            <li><code>@w</code> = snap to week</li>
+                            <li><code>@mon</code> = snap to month</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="code-scroll">
+                    <h3>Examples:</h3>
+                    <pre><code>
+earliest=-1h@h latest=@h        (Previous hour, exactly)
+earliest=-7d@d latest=-1d@d     (Week ago to yesterday, midnight to midnight)
+earliest=-1mon@mon latest=@mon   (Previous month, exactly)
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Field Case Sensitivity -->
+            <section>
+                <h2 class="session-header">Field Names: Case Sensitivity Rules</h2>
+                <div class="key-concept">
+                    <p><strong>Important:</strong> Field names are case-sensitive, field values generally are not</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Case Errors</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Wrong field name case
+Status=200    (should be status=200)
+HOST=web01    (should be host=web01)
+Clientip=*    (should be clientip=*)
+
+# These will NOT match
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Correct Usage</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Correct field name case
+status=200
+host=web01
+clientip=192.168.1.1
+
+# Field values (usually case-insensitive)
+method=GET or method=get (both work)
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Tip:</strong> Use Field Sidebar to see exact field name casing</p>
+            </section>
+
+            <!-- Advanced Search Techniques -->
+            <section>
+                <h2 class="session-header">Advanced Search Techniques</h2>
+                <div class="key-concept">
+                    <p><strong>Beyond Basics:</strong> Powerful techniques for complex searches</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Boolean Logic</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# AND is implied
+index=main error failed
+(same as: index=main error AND failed)
+
+# Explicit OR
+(status=404 OR status=500)
+
+# Complex combinations
+(error OR exception) AND status!=200
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Field Comparisons</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Numeric comparisons
+bytes > 1000
+duration <= 5.0
+response_time >= avg_time
+
+# Field to field
+src_bytes > dest_bytes
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Field Discovery -->
+            <section>
+                <h2 class="session-header">Field Discovery in Splunk</h2>
+                <div class="key-concept">
+                    <p><strong>Fields:</strong> Searchable name-value pairs extracted from your data</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Default Fields</h3>
+                        <ul>
+                            <li><code>_time</code> - Event timestamp</li>
+                            <li><code>host</code> - Source host</li>
+                            <li><code>source</code> - Data source</li>
+                            <li><code>sourcetype</code> - Data format</li>
+                            <li><code>index</code> - Index name</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Extracted Fields</h3>
+                        <ul>
+                            <li>Automatically discovered</li>
+                            <li>Based on source type</li>
+                            <li>Displayed in Field sidebar</li>
+                            <li>Can be customized</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Field Usage -->
+            <section>
+                <h2 class="session-header">Using Fields in Searches</h2>
+                <div class="code-scroll">
+                    <h3>Field-based Search Examples:</h3>
+                    <pre><code>
+# Search by status code
+status=200
+
+# Search by multiple fields
+status=200 method=GET
+
+# Field comparison
+bytes > 1000
+
+# Field existence
+| where isnotnull(user)
+
+# Field patterns
+host=web*
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Lab 3 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 3: Using Fields in Searches</h2>
+                    <p><strong>Duration:</strong> 45 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Identify and use extracted fields</li>
+                        <li>Filter data using field values</li>
+                        <li>Combine multiple field conditions</li>
+                        <li>Explore field relationships</li>
+                        <li>Use field discovery tools</li>
+                    </ul>
+                    <p><strong>Focus:</strong> Leveraging field-based analysis</p>
+                </div>
+            </section>
+
+            <!-- Basic Commands Overview -->
+            <section>
+                <h2 class="session-header">Essential Splunk Commands</h2>
+                <div class="key-concept">
+                    <p><strong>Commands:</strong> Tools to manipulate, format, and analyze search results</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Data Selection</h3>
+                        <ul>
+                            <li><code>fields</code> - Select specific fields</li>
+                            <li><code>table</code> - Display tabular format</li>
+                            <li><code>dedup</code> - Remove duplicates</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Data Transformation</h3>
+                        <ul>
+                            <li><code>rename</code> - Change field names</li>
+                            <li><code>eval</code> - Create calculated fields</li>
+                            <li><code>sort</code> - Order results</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Fields Command -->
+            <section>
+                <h2 class="session-header">The fields Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Specify which fields to include or exclude from results</p>
+                </div>
+                <div class="code-scroll">
+                    <pre><code>
+# Include specific fields
+index=main | fields host, sourcetype, _time
+
+# Exclude fields (use minus sign)
+index=main | fields - _raw, _indextime
+
+# Performance benefit: reduces data processing
+index=main | fields clientip, status | stats count by clientip
+                    </code></pre>
+                </div>
+                <p><strong>Best Practice:</strong> Use early in search pipeline for performance</p>
+            </section>
+
+            <!-- Table Command -->
+            <section>
+                <h2 class="session-header">The table Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Display results in organized tabular format</p>
+                </div>
+                <div class="code-scroll">
+                    <pre><code>
+# Create table with specific columns
+index=main | table _time, host, status
+
+# Column order matters
+index=main | table status, host, _time
+
+# Combine with other commands
+index=main | stats count by host | table host, count
+                    </code></pre>
+                </div>
+                <p><strong>Use Case:</strong> Clean, readable reports for stakeholders</p>
+            </section>
+
+            <!-- Rename Command -->
+            <section>
+                <h2 class="session-header">The rename Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Change field names for clarity or business alignment</p>
+                </div>
+                <div class="code-scroll">
+                    <pre><code>
+# Rename single field
+index=main | rename clientip as "Client IP"
+
+# Rename multiple fields
+index=main | rename clientip as IP, status as "Status Code"
+
+# Business-friendly naming
+index=main | rename JSESSIONID as "User Session"
+                    </code></pre>
+                </div>
+                <p><strong>Business Value:</strong> Aligns technical fields with business terminology</p>
+            </section>
+
+            <!-- Dedup Command -->
+            <section>
+                <h2 class="session-header">The dedup Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Remove duplicate records based on specified fields</p>
+                </div>
+                <div class="code-scroll">
+                    <pre><code>
+# Remove duplicates by single field
+index=main | dedup clientip
+
+# Remove duplicates by multiple fields
+index=main | dedup clientip, useragent
+
+# Keep first N duplicates
+index=main | dedup clientip keepevents=true
+                    </code></pre>
+                </div>
+                <p><strong>Performance Tip:</strong> Place early in pipeline when possible</p>
+            </section>
+
+            <!-- Lab 4 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 4: Basic Splunk Commands</h2>
+                    <p><strong>Duration:</strong> 60 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Use fields command for performance optimization</li>
+                        <li>Create organized reports with table command</li>
+                        <li>Rename fields for business alignment</li>
+                        <li>Remove duplicates with dedup command</li>
+                        <li>Build complete search pipelines</li>
+                    </ul>
+                    <p><strong>Scenario:</strong> Marketing campaign analysis for Buttercup Games</p>
+                </div>
+            </section>
+
+            <!-- Search Pipeline Best Practices -->
+            <section>
+                <h2 class="session-header">Search Pipeline Optimization</h2>
+                <div class="key-concept">
+                    <p><strong>Goal:</strong> Build efficient, readable search pipelines</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Command Ordering</h3>
+                        <ol>
+                            <li>Filter early (search terms)</li>
+                            <li>Remove duplicates (dedup)</li>
+                            <li>Select fields (fields)</li>
+                            <li>Transform data (eval, rename)</li>
+                            <li>Format output (table, sort)</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3>Performance Tips</h3>
+                        <ul>
+                            <li>Minimize data early</li>
+                            <li>Use specific search terms</li>
+                            <li>Limit unnecessary fields</li>
+                            <li>Avoid expensive operations late</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Troubleshooting Common Issues -->
+            <section>
+                <h2 class="session-header">Common Search Issues</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>No Results</h3>
+                        <ul>
+                            <li>Check time range</li>
+                            <li>Verify field names (case-sensitive)</li>
+                            <li>Remove restrictive filters</li>
+                            <li>Use wildcards for testing</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Slow Performance</h3>
+                        <ul>
+                            <li>Narrow time range</li>
+                            <li>Use specific indexes</li>
+                            <li>Filter before transforming</li>
+                            <li>Limit field extraction</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content 1 Summary -->
+            <section>
+                <h2 class="session-header">Content 1 Summary</h2>
+                <div class="key-concept">
+                    <p><strong>Foundation Skills Achieved</strong></p>
+                </div>
+                <ul>
+                    <li>✅ <strong>Splunk Architecture:</strong> Understanding components and data pipeline</li>
+                    <li>✅ <strong>Data Loading:</strong> Configuring source types and ingestion</li>
+                    <li>✅ <strong>Basic Search:</strong> Using SPL for data exploration</li>
+                    <li>✅ <strong>Field Usage:</strong> Leveraging extracted fields for analysis</li>
+                    <li>✅ <strong>Essential Commands:</strong> Building effective search pipelines</li>
+                </ul>
+            </section>
+
+            <!-- What's Next -->
+            <section>
+                <h2 class="session-header">Preparing for Content 2</h2>
+                <p>Building on your foundation skills, you'll learn:</p>
+                <ul>
+                    <li><strong>Statistical Analysis:</strong> Using transforming commands</li>
+                    <li><strong>Report Creation:</strong> Building dashboards and visualizations</li>
+                    <li><strong>Pivot Tables:</strong> Business user analytics tools</li>
+                    <li><strong>Data Enrichment:</strong> Implementing lookup tables</li>
+                    <li><strong>Proactive Monitoring:</strong> Creating automated alerts</li>
+                </ul>
+                <div class="key-concept">
+                    <p><strong>Focus:</strong> Advanced analytics and business intelligence</p>
+                </div>
+            </section>
+
+            <!-- Q&A and Resources -->
+            <section>
+                <h2 class="session-header">Questions & Resources</h2>
+                <div style="text-align: center;">
+                    <h3>Questions?</h3>
+                    <p>Ready to put your skills to work in the labs!</p>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Key Resources:</strong></p>
+                    <ul>
+                        <li>Splunk Search Reference</li>
+                        <li>SPL Command Documentation</li>
+                        <li>Best Practices Guide</li>
+                        <li>Lab Exercise Files</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade'
+        });
+    </script>
+</body>
+</html>

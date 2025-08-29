@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Splunk Fundamentals - Content 2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
+    <style>
+        .reveal h1, .reveal h2 {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .reveal .session-header {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .lab-callout {
+            background-color: #e3f2fd;
+            border: 3px solid #2196f3;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .code-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .key-concept {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>Splunk Fundamentals</h1>
+                <h2>Content 2</h2>
+                <p>Advanced Analytics and Business Intelligence</p>
+                <p><em>Transforming Commands, Reports, Dashboards, and Data Enrichment</em></p>
+            </section>
+
+            <!-- Welcome to Content 2 -->
+            <section>
+                <h2 class="session-header">Welcome to Content 2!</h2>
+                <div class="key-concept">
+                    <p><strong>Building on Foundation Skills:</strong> Advanced analytics and business reporting</p>
+                </div>
+                <ul>
+                    <li><strong>Day 2 Focus:</strong> Statistical analysis and visualization</li>
+                    <li><strong>Business Intelligence:</strong> Creating actionable insights</li>
+                    <li><strong>Data Enrichment:</strong> Adding context to raw data</li>
+                    <li><strong>Automation:</strong> Proactive monitoring and alerting</li>
+                </ul>
+            </section>
+
+            <!-- Content 2 Learning Objectives -->
+            <section>
+                <h2 class="session-header">Content 2 Learning Objectives</h2>
+                <p>By the end of this section, you will be able to:</p>
+                <ul>
+                    <li>Use transforming commands for statistical analysis</li>
+                    <li>Create professional reports and dashboards</li>
+                    <li>Build pivot tables for business users</li>
+                    <li>Implement lookup tables for data enrichment</li>
+                    <li>Set up automated alerts and monitoring</li>
+                    <li>Apply advanced search optimization techniques</li>
+                </ul>
+            </section>
+
+            <!-- SPL Pipeline Readability -->
+            <section>
+                <h2 class="session-header">Making SPL Pipelines More Readable</h2>
+                <div class="key-concept">
+                    <p><strong>Best Practice:</strong> Format search pipelines for better readability</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>❌ Hard to Read</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+index=web sourcetype=access_* status=503 | stats sum(price) as lost_revenue | eval lost_revenue = "$" + tostring(lost_revenue, "commas")
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Well Formatted</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+index=web sourcetype=access_* status=503 
+| stats sum(price) as lost_revenue 
+| eval lost_revenue = "$" + tostring(lost_revenue, "commas")
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <p><strong>Tip:</strong> Enable auto-formatting in Preferences > SPL Editor</p>
+            </section>
+
+            <!-- Lab 5 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 5: Transforming Commands</h2>
+                    <p><strong>Duration:</strong> 90 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Use top and rare commands for frequency analysis</li>
+                        <li>Apply stats command with various statistical functions</li>
+                        <li>Calculate count, distinct count, sum, and averages</li>
+                        <li>Build revenue reports with enriched data</li>
+                        <li>Optimize search performance</li>
+                    </ul>
+                    <p><strong>Scenario:</strong> Analyze best-selling products and user patterns for Buttercup Games</p>
+                </div>
+            </section>
+
+            <!-- Transforming Commands Overview -->
+            <section>
+                <h2 class="session-header">Transforming Commands</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Transform search results into statistical data tables</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Frequency Analysis</h3>
+                        <ul>
+                            <li><code>top</code> - Most common values</li>
+                            <li><code>rare</code> - Least common values</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Statistical Analysis</h3>
+                        <ul>
+                            <li><code>stats</code> - Calculate statistics</li>
+                            <li><code>chart</code> - Create data series</li>
+                            <li><code>timechart</code> - Time-based analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Command -->
+            <section>
+                <h2 class="session-header">The top Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Find the most common values of a given field</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Basic Usage:</h3>
+                    <pre><code>
+# Default: top 10 values with count and percent
+index=security sourcetype=linux_secure (fail* OR invalid)
+| top src_ip
+
+# Limit results and remove percentages
+index=main sourcetype=access_combined status=200 file=success.do
+| top productId limit=5 showperc=false
+
+# Custom count field name
+index=network sourcetype=cisco_wsa_squid
+| top cs_username x_webcat_code_full limit=3 
+  countfield="Total Viewed" showperc=f
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Rare Command -->
+            <section>
+                <h2 class="session-header">The rare Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Find the least common values of a given field</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Security Analysis Example:</h3>
+                    <pre><code>
+# Find rarely accessed files (potential security threats)
+index=main sourcetype=access_combined status=200
+| rare file
+
+# Break down by time period
+index=main sourcetype=access_combined status=200
+| rare file by date_month
+
+# Limit to single rarest value
+index=sales sourcetype=vendor_sales
+| rare product_name showperc=f limit=1
+                    </code></pre>
+                </div>
+                <p><strong>Use Case:</strong> Identify suspicious file access patterns or unusual behavior</p>
+            </section>
+
+            <!-- Stats Command Overview -->
+            <section>
+                <h2 class="session-header">The stats Command</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Calculate statistics on data matching your search criteria</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div>
+                        <h3>Common Functions</h3>
+                        <ul>
+                            <li><code>count</code> - Number of events</li>
+                            <li><code>dc(field)</code> - Distinct count</li>
+                            <li><code>sum(field)</code> - Sum of values</li>
+                            <li><code>avg(field)</code> - Average value</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Advanced Functions</h3>
+                        <ul>
+                            <li><code>list(field)</code> - All values</li>
+                            <li><code>values(field)</code> - Unique values</li>
+                            <li><code>min(field)</code> - Minimum value</li>
+                            <li><code>max(field)</code> - Maximum value</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Count -->
+            <section>
+                <h2 class="session-header">stats count</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Count events matching search criteria</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Examples:</h3>
+                    <pre><code>
+# Simple count
+index=security sourcetype=linux_secure (invalid OR failed)
+| stats count
+
+# Count with custom name
+index=security sourcetype=linux_secure (invalid OR failed)
+| stats count as "Potential Issues"
+
+# Count by field
+index=main sourcetype=access_combined (file=cart.do OR file=success.do) status=200
+| stats count as Transactions by file
+| rename file as Function
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Stats Distinct Count -->
+            <section>
+                <h2 class="session-header">stats dc() - Distinct Count</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Count unique values for a given field</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>User Session Analysis:</h3>
+                    <pre><code>
+# Count unique sessions
+index=main sourcetype=access_combined
+| stats dc(JSESSIONID) as Logins
+
+# Break down by IP address
+index=main sourcetype=access_combined
+| stats dc(JSESSIONID) as Logins by clientip
+| sort -Logins
+
+# Multiple metrics
+index=network sourcetype=cisco_wsa_squid
+| stats dc(s_hostname) as "Websites visited:"
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Stats Sum -->
+            <section>
+                <h2 class="session-header">stats sum() - Calculate Totals</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Sum numeric values for analysis</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Bandwidth and Revenue Analysis:</h3>
+                    <pre><code>
+# Total bandwidth consumption
+index=main sourcetype=access_combined status=200
+| stats sum(bytes) as TotalBytes by file
+| sort file
+
+# Revenue calculation with multiple functions
+index=sales sourcetype=vendor_sales
+| stats count(price) as "Units Sold",
+        sum(price) as "Total Sales" by product_name
+| sort -"Total Sales"
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Stats Average -->
+            <section>
+                <h2 class="session-header">stats avg() - Performance Analysis</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Calculate average values for performance monitoring</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Database Performance Example:</h3>
+                    <pre><code>
+# Average query time
+index=main sourcetype=db_audit
+| stats avg(Duration)
+
+# Performance by command type
+index=main sourcetype=db_audit
+| stats avg(Duration) as "time to complete" by Command
+| sort -"time to complete"
+
+# Network performance
+index=network sourcetype=cisco_wsa_squid
+| stats avg(sc_bytes) as "Average Bytes" by usage
+                    </code></pre>
+                </div>
+                <p><strong>Note:</strong> Events without the field or with invalid values are excluded</p>
+            </section>
+
+            <!-- Stats List vs Values -->
+            <section>
+                <h2 class="session-header">stats list() vs values()</h2>
+                <div class="key-concept">
+                    <p><strong>Key Difference:</strong> list() shows all values, values() shows unique values only</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>list() - All Values</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Shows all values (including duplicates)
+index=network sourcetype=cisco_wsa_squid
+| stats list(s_hostname) as "Websites visited:" by cs_username
+
+# Browser usage with counts
+index=main sourcetype=access_combined
+| stats list(useragent) as "All Agents",
+        count as "Times used" by useragent
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>values() - Unique Only</h3>
+                        <div class="code-scroll">
+                            <pre><code>
+# Shows unique values only
+index=security sourcetype=linux_secure fail*
+| stats values(user) as "User Names",
+        count(user) as Attempts by src_ip
+
+# Clean browser list
+index=main sourcetype=access_combined
+| stats values(useragent) as "Agents used"
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Table Formatting -->
+            <section>
+                <h2 class="session-header">Formatting Statistical Tables</h2>
+                <div class="key-concept">
+                    <p><strong>Enhancement:</strong> Make tables more readable and professional</p>
+                </div>
+                <ul>
+                    <li><strong>Color Coding:</strong> Highlight outstanding values with heat maps</li>
+                    <li><strong>Number Formatting:</strong> Add currency symbols and thousands separators</li>
+                    <li><strong>Data Overlay:</strong> High/low value highlighting</li>
+                    <li><strong>Column Formatting:</strong> Per-column customization</li>
+                </ul>
+                <div class="code-scroll">
+                    <h3>Professional Revenue Report:</h3>
+                    <pre><code>
+index=sales sourcetype=vendor_sales
+| stats count(price) as "Units Sold",
+        sum(price) as "Total Sales" by product_name
+| sort -"Total Sales"
+# Apply formatting via Format menu for currency display
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Lab 6 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 6: Creating Reports and Dashboards</h2>
+                    <p><strong>Duration:</strong> 75 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Save searches as reusable reports</li>
+                        <li>Create visualizations with different chart types</li>
+                        <li>Build interactive dashboards</li>
+                        <li>Configure drilldown functionality</li>
+                        <li>Share reports across teams</li>
+                    </ul>
+                    <p><strong>Focus:</strong> Building business intelligence dashboards</p>
+                </div>
+            </section>
+
+            <!-- What Are Reports -->
+            <section>
+                <h2 class="session-header">What Are Reports?</h2>
+                <div class="key-concept">
+                    <p><strong>Reports:</strong> Saved searches that can show events, statistics, or visualizations</p>
+                </div>
+                <ul>
+                    <li><strong>Reusable:</strong> Run the same analysis repeatedly</li>
+                    <li><strong>Fresh Data:</strong> Returns current results each time</li>
+                    <li><strong>Interactive:</strong> Enable drilldown to underlying events</li>
+                    <li><strong>Shareable:</strong> Distribute across teams and dashboards</li>
+                    <li><strong>Scheduled:</strong> Can run automatically</li>
+                </ul>
+                <div class="key-concept">
+                    <p><strong>Best Practice:</strong> Use descriptive naming conventions like `Sales_Report_QuarterlySalesRevenue`</p>
+                </div>
+            </section>
+
+            <!-- Creating Visualizations -->
+            <section>
+                <h2 class="session-header">Creating Tables and Visualizations</h2>
+                <div class="key-concept">
+                    <p><strong>Three Main Methods:</strong></p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>1. Field Sidebar</h3>
+                        <p>Select field and choose report type</p>
+                        <ul>
+                            <li>Quick analysis</li>
+                            <li>Automatic formatting</li>
+                            <li>Instant visualizations</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>2. Pivot Interface</h3>
+                        <p>Drag-and-drop analytics</p>
+                        <ul>
+                            <li>Business user friendly</li>
+                            <li>No SPL required</li>
+                            <li>Dataset-based</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>3. SPL Commands</h3>
+                        <p>Full control with search language</p>
+                        <ul>
+                            <li>Maximum flexibility</li>
+                            <li>Complex analysis</li>
+                            <li>Precise control</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualization Types -->
+            <section>
+                <h2 class="session-header">Visualization Options</h2>
+                <div class="key-concept">
+                    <p><strong>Choose the Right Chart:</strong> Different data tells different stories</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div>
+                        <h3>Categorical Data</h3>
+                        <ul>
+                            <li><strong>Bar/Column Charts:</strong> Compare categories</li>
+                            <li><strong>Pie Charts:</strong> Show proportions</li>
+                            <li><strong>Tables:</strong> Detailed data view</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Time-Based Data</h3>
+                        <ul>
+                            <li><strong>Line Charts:</strong> Trends over time</li>
+                            <li><strong>Area Charts:</strong> Volume over time</li>
+                            <li><strong>Scatter Plots:</strong> Correlation analysis</li>
+                        </ul>
+                    </div>
+                </div>
+                <p><strong>Customization:</strong> Format menu allows axis labels, colors, legends, and data overlays</p>
+            </section>
+
+            <!-- Dashboards -->
+            <section>
+                <h2 class="session-header">What Is a Dashboard?</h2>
+                <div class="key-concept">
+                    <p><strong>Dashboard:</strong> Collection of panels displaying data visually for business insights</p>
+                </div>
+                <ul>
+                    <li><strong>Multiple Panels:</strong> Combine different views of data</li>
+                    <li><strong>Report-Based:</strong> Panels created from saved reports</li>
+                    <li><strong>Interactive:</strong> Enable drilldown and filtering</li>
+                    <li><strong>Shareable:</strong> Export as PDF or print</li>
+                    <li><strong>Real-time:</strong> Updates with fresh data</li>
+                </ul>
+                <div class="key-concept">
+                    <p><strong>Efficiency Tip:</strong> Create panels from reports for reusability and consistency</p>
+                </div>
+            </section>
+
+            <!-- Dashboard Management -->
+            <section>
+                <h2 class="session-header">Dashboard Design Best Practices</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Layout and Design</h3>
+                        <ul>
+                            <li>Drag panels to reposition</li>
+                            <li>Use consistent color schemes</li>
+                            <li>Group related information</li>
+                            <li>Provide clear panel titles</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Functionality</h3>
+                        <ul>
+                            <li>Enable drilldown for detail</li>
+                            <li>Use appropriate chart types</li>
+                            <li>Add time range pickers</li>
+                            <li>Consider mobile viewing</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Maintenance:</strong> Changes to underlying reports automatically update all dashboard panels using that report</p>
+                </div>
+            </section>
+
+            <!-- Lab 7 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 7: Pivot Tables and Datasets</h2>
+                    <p><strong>Duration:</strong> 60 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Navigate the Datasets interface</li>
+                        <li>Create pivot tables with drag-and-drop</li>
+                        <li>Use instant pivot for ad-hoc analysis</li>
+                        <li>Configure filters and time ranges</li>
+                        <li>Save pivots as reports</li>
+                    </ul>
+                    <p><strong>Audience:</strong> Business users who prefer point-and-click analytics</p>
+                </div>
+            </section>
+
+            <!-- Pivot and Datasets Overview -->
+            <section>
+                <h2 class="session-header">Pivot & Datasets</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Business-friendly interface for data analysis without SPL</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Dataset Pivot</h3>
+                        <ul>
+                            <li>Uses pre-built data models</li>
+                            <li>Structured field relationships</li>
+                            <li>Optimized for performance</li>
+                            <li>Consistent field definitions</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Instant Pivot</h3>
+                        <ul>
+                            <li>Create pivot from any search</li>
+                            <li>No data model required</li>
+                            <li>Ad-hoc analysis</li>
+                            <li>Quick exploration</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pivot Interface -->
+            <section>
+                <h2 class="session-header">Using the Pivot Interface</h2>
+                <div class="key-concept">
+                    <p><strong>Drag-and-Drop Analytics:</strong> Build complex analysis visually</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Filters</h3>
+                        <p>Time ranges and field constraints</p>
+                        <ul>
+                            <li>Time range picker</li>
+                            <li>Field value filters</li>
+                            <li>Multiple conditions</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Split Rows/Columns</h3>
+                        <p>Break down data by dimensions</p>
+                        <ul>
+                            <li>Row grouping</li>
+                            <li>Column analysis</li>
+                            <li>Sort options</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Column Values</h3>
+                        <p>Define what to calculate</p>
+                        <ul>
+                            <li>Count of events</li>
+                            <li>Statistical functions</li>
+                            <li>Multiple metrics</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instant Pivot -->
+            <section>
+                <h2 class="session-header">Instant Pivot Overview</h2>
+                <div class="key-concept">
+                    <p><strong>Quick Analysis:</strong> Convert any search into pivot analysis</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Steps to Create Instant Pivot:</h3>
+                    <pre><code>
+1. Execute a search (search criteria only, no commands)
+   Example: index=main sourcetype=access_combined action=purchase
+
+2. Click the Statistics or Visualization tab
+
+3. Click the Pivot icon
+
+4. Select fields to include in the data model
+
+5. Create the pivot (table or chart)
+                    </code></pre>
+                </div>
+                <p><strong>Use Case:</strong> Perfect for exploratory analysis and one-time investigations</p>
+            </section>
+
+            <!-- Lab 8 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 8: Creating and Using Lookups</h2>
+                    <p><strong>Duration:</strong> 90 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Upload and configure lookup table files</li>
+                        <li>Create lookup definitions</li>
+                        <li>Apply lookups manually with lookup command</li>
+                        <li>Configure automatic lookups</li>
+                        <li>Calculate business metrics using enriched data</li>
+                    </ul>
+                    <p><strong>Scenario:</strong> Add product names and pricing to Buttercup Games transaction data</p>
+                </div>
+            </section>
+
+            <!-- What Is a Lookup -->
+            <section>
+                <h2 class="session-header">What Is a Lookup?</h2>
+                <div class="key-concept">
+                    <p><strong>Lookup:</strong> Add fields from external data sources to enrich your events</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Common Use Cases</h3>
+                        <ul>
+                            <li>Product catalogs (ID to name/price)</li>
+                            <li>User directories (ID to username)</li>
+                            <li>Status code descriptions</li>
+                            <li>Geographic information</li>
+                            <li>Asset inventories</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Benefits</h3>
+                        <ul>
+                            <li>Add business context</li>
+                            <li>Enrich technical data</li>
+                            <li>Enable meaningful reports</li>
+                            <li>Improve user experience</li>
+                            <li>Support compliance needs</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lookup File Structure -->
+            <section>
+                <h2 class="session-header">Lookup File Structure</h2>
+                <div class="key-concept">
+                    <p><strong>CSV Format:</strong> First row contains field names (headers)</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Example: products.csv</h3>
+                    <pre><code>
+productId,product_name,categoryId,price,sale_price,Code
+DB-SG-G01,Mediocre Kingdoms,STRATEGY,24.99,19.99,A
+DC-SG-G02,Dream Crusher,STRATEGY,39.99,24.99,B
+FS-SG-G03,Final Sequel,STRATEGY,24.99,16.99,C
+WC-SH-G04,World of Cheese,SHOOTER,24.99,19.99,D
+WC-SH-T02,World of Cheese Tee,TEE,9.99,6.99,E
+                    </code></pre>
+                </div>
+                <ul>
+                    <li><strong>Input Field:</strong> productId (matches field in events)</li>
+                    <li><strong>Output Fields:</strong> product_name, price, etc. (added to events)</li>
+                    <li><strong>Case Sensitive:</strong> Field values are case-sensitive by default</li>
+                </ul>
+            </section>
+
+            <!-- Lookup Commands -->
+            <section>
+                <h2 class="session-header">Lookup Commands</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>inputlookup</h3>
+                        <p>View lookup file contents</p>
+                        <div class="code-scroll">
+                            <pre><code>
+# Review lookup data
+| inputlookup products.csv
+
+# Validate lookup definition
+| inputlookup products_lookup
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div class="key-concept">
+                        <h3>lookup</h3>
+                        <p>Apply lookup to search results</p>
+                        <div class="code-scroll">
+                            <pre><code>
+# Manual lookup application
+index=main sourcetype=access_combined
+| lookup products_lookup 
+    productId as productId 
+    OUTPUT product_name as ProductName
+
+# Multiple outputs
+| lookup products_lookup productId 
+  OUTPUT product_name, price
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Automatic Lookups -->
+            <section>
+                <h2 class="session-header">Automatic Lookups</h2>
+                <div class="key-concept">
+                    <p><strong>Seamless Integration:</strong> Fields automatically added without lookup command</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Configuration Steps:</h3>
+                    <pre><code>
+1. Settings → Lookups → Automatic lookups
+2. Create new automatic lookup:
+   - Name: products_auto_lookup
+   - Lookup table: products_lookup
+   - Apply to: sourcetype = access_combined_wcookie
+   - Input fields: productId = productId
+   - Output fields: product_name = ProductName, price = Price
+
+3. Use enriched fields in searches:
+index=main sourcetype=access_combined file=success.do status=200
+| stats sum(Price) as Revenue by ProductName
+| sort -Revenue
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Advanced Lookup Features -->
+            <section>
+                <h2 class="session-header">Advanced Lookup Features</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Time-Based Lookups</h3>
+                        <ul>
+                            <li>Match based on time ranges</li>
+                            <li>Historical pricing data</li>
+                            <li>Seasonal adjustments</li>
+                            <li>Dynamic policy enforcement</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Lookup Options</h3>
+                        <ul>
+                            <li><code>local=true</code> - Search head specific</li>
+                            <li><code>update=true</code> - Overwrite fields</li>
+                            <li>Case-insensitive matching</li>
+                            <li>Default values for misses</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="code-scroll">
+                    <h3>Complex Lookup Example:</h3>
+                    <pre><code>
+# Multi-field lookup with time component
+| lookup seasonal_pricing 
+    productId as productId 
+    _time as sale_date 
+    OUTPUT adjusted_price, promotion_code
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Lab 9 Callout -->
+            <section>
+                <div class="lab-callout">
+                    <h2>🧪 Lab 9: Alerts and Scheduled Reports</h2>
+                    <p><strong>Duration:</strong> 60 minutes</p>
+                    <h3>What You'll Learn:</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create real-time and scheduled alerts</li>
+                        <li>Configure alert conditions and thresholds</li>
+                        <li>Set up email and webhook notifications</li>
+                        <li>Schedule reports for automated delivery</li>
+                        <li>Manage alert suppression and throttling</li>
+                    </ul>
+                    <p><strong>Focus:</strong> Proactive monitoring and automated business intelligence</p>
+                </div>
+            </section>
+
+            <!-- Why Scheduled Reports -->
+            <section>
+                <h2 class="session-header">Why Scheduled Reports?</h2>
+                <div class="key-concept">
+                    <p><strong>Automation:</strong> Deliver insights automatically without manual intervention</p>
+                </div>
+                <ul>
+                    <li><strong>Executive Reporting:</strong> Monthly, weekly, daily management roll-up reports</li>
+                    <li><strong>Performance Optimization:</strong> Dashboard performance through scheduled summary indexing</li>
+                    <li><strong>Distribution:</strong> Automatically sending reports via email to stakeholders</li>
+                    <li><strong>Compliance:</strong> Regular compliance and audit reporting</li>
+                    <li><strong>Operational Intelligence:</strong> Regular system health and performance reports</li>
+                </ul>
+                <div class="key-concept">
+                    <p><strong>Business Value:</strong> Reduce manual reporting effort and ensure consistent delivery</p>
+                </div>
+            </section>
+
+            <!-- Creating Scheduled Reports -->
+            <section>
+                <h2 class="session-header">Creating a Scheduled Report - Define Schedule</h2>
+                <div class="key-concept">
+                    <p><strong>Configuration Options:</strong> Flexible scheduling to meet business needs</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Schedule Frequencies</h3>
+                        <ul>
+                            <li><strong>Run every hour:</strong> Real-time operational monitoring</li>
+                            <li><strong>Run every day:</strong> Daily business summaries</li>
+                            <li><strong>Run every week:</strong> Weekly performance reviews</li>
+                            <li><strong>Run every month:</strong> Monthly executive reports</li>
+                            <li><strong>Run on Cron Schedule:</strong> Custom timing patterns</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Schedule Configuration</h3>
+                        <ul>
+                            <li><strong>Time Range:</strong> Data window for each run</li>
+                            <li><strong>Schedule Window:</strong> Execution time tolerance</li>
+                            <li><strong>Priority:</strong> Higher priority for critical reports</li>
+                            <li><strong>Concurrent Searches:</strong> Resource management</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scheduled Report Actions -->
+            <section>
+                <h2 class="session-header">Scheduled Report Actions</h2>
+                <div class="key-concept">
+                    <p><strong>Trigger Actions:</strong> What happens when the report runs</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Data Actions</h3>
+                        <ul>
+                            <li><strong>Log Event:</strong> Create indexed, searchable log event</li>
+                            <li><strong>Output to Lookup:</strong> Send results to CSV lookup file</li>
+                            <li><strong>Output to Telemetry:</strong> Send metrics to Splunk (opt-in)</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Notification Actions</h3>
+                        <ul>
+                            <li><strong>Send Email:</strong> Email results to recipients</li>
+                            <li><strong>Run Script:</strong> Execute custom scripts</li>
+                            <li><strong>Webhook:</strong> HTTP POST to specified URL</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Managing Reports - Embed -->
+            <section>
+                <h2 class="session-header">Report Embedding</h2>
+                <div class="key-concept">
+                    <p><strong>Web Integration:</strong> Embed reports directly in web pages</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Embedding Process:</h3>
+                    <pre><code>
+1. Navigate to Reports → Select your report
+2. Click Edit → Embed
+3. Enable Report Embedding
+4. Copy the provided iframe code
+5. Paste into your HTML-based webpage
+
+Requirements:
+- Report must be scheduled first
+- Embedded report updates with scheduled runs
+- Viewers need appropriate Splunk permissions
+                    </code></pre>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Use Cases:</strong> Corporate intranets, executive dashboards, operational centers</p>
+                </div>
+            </section>
+
+            <!-- What Are Alerts -->
+            <section>
+                <h2 class="session-header">What Are Alerts?</h2>
+                <div class="key-concept">
+                    <p><strong>Proactive Monitoring:</strong> Automated notification when conditions are met</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Alert Types</h3>
+                        <ul>
+                            <li><strong>Scheduled Alerts:</strong> Run at regular intervals</li>
+                            <li><strong>Real-time Alerts:</strong> Monitor continuously</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Alert Actions</h3>
+                        <ul>
+                            <li>Create entry in Triggered Alerts</li>
+                            <li>Log an event to Splunk</li>
+                            <li>Output results to lookup file</li>
+                            <li>Send email notifications</li>
+                            <li>Execute webhooks</li>
+                            <li>Perform custom actions</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alert Types Comparison -->
+            <section>
+                <h2 class="session-header">Choosing Real-time vs Scheduled Alerts</h2>
+                <div class="key-concept">
+                    <p><strong>Decision Factors:</strong> Urgency, resource usage, and business requirements</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>Scheduled Alerts</h3>
+                        <ul>
+                            <li><strong>Operation:</strong> Search runs at defined interval</li>
+                            <li><strong>Evaluation:</strong> Trigger condition checked when search completes</li>
+                            <li><strong>Resource Usage:</strong> Lower system impact</li>
+                            <li><strong>Use Cases:</strong> Daily summaries, trend analysis, compliance</li>
+                            <li><strong>Latency:</strong> Delayed by schedule interval</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Real-time Alerts</h3>
+                        <ul>
+                            <li><strong>Operation:</strong> Search runs constantly in background</li>
+                            <li><strong>Evaluation:</strong> Conditions evaluated within time window</li>
+                            <li><strong>Resource Usage:</strong> Higher system impact</li>
+                            <li><strong>Use Cases:</strong> Security incidents, system failures</li>
+                            <li><strong>Latency:</strong> Near real-time notification</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scheduled Alert Configuration -->
+            <section>
+                <h2 class="session-header">Setting Up Scheduled Alerts</h2>
+                <div class="key-concept">
+                    <p><strong>Configuration Steps:</strong> Define schedule, conditions, and actions</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Frequency Options:</h3>
+                    <pre><code>
+• Run every hour: 0 * * * * (every hour on the hour)
+• Run every day: 0 6 * * * (daily at 6:00 AM)
+• Run every week: 0 6 * * 1 (weekly on Monday at 6:00 AM)
+• Run every month: 0 6 1 * * (monthly on 1st day at 6:00 AM)
+• Custom Cron Schedule: Define complex patterns
+
+Time Range Examples:
+• Last 24 hours: -24h@h to @h
+• Previous complete day: -1d@d to @d
+• Last 7 days: -7d@d to @d
+• Previous week: -1w@w1 to @w1
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Alert Trigger Conditions -->
+            <section>
+                <h2 class="session-header">Setting Trigger Conditions</h2>
+                <div class="key-concept">
+                    <p><strong>Condition Types:</strong> Define when alerts should fire</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Scheduled Conditions</h3>
+                        <ul>
+                            <li><strong>Number of Results:</strong> Alert when result count exceeds threshold</li>
+                            <li><strong>Number of Hosts:</strong> Alert when unique hosts exceed limit</li>
+                            <li><strong>Number of Sources:</strong> Alert when unique sources exceed limit</li>
+                            <li><strong>Custom Condition:</strong> Use SPL for complex logic</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Real-time Conditions</h3>
+                        <ul>
+                            <li><strong>Per-Result:</strong> Trigger on each matching result</li>
+                            <li><strong>Rolling Window:</strong> Evaluate conditions over time periods</li>
+                            <li><strong>Threshold Based:</strong> Count, hosts, sources thresholds</li>
+                            <li><strong>Custom Logic:</strong> Complex SPL-based conditions</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alert Action Configuration -->
+            <section>
+                <h2 class="session-header">Alert Action Configuration</h2>
+                <div class="key-concept">
+                    <p><strong>Execution Modes:</strong> How often actions fire when conditions are met</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>Once (Recommended)</h3>
+                        <ul>
+                            <li>Executes actions one time for all matching events</li>
+                            <li>Prevents alert flooding</li>
+                            <li>Example: 40 results → 1 alert</li>
+                            <li>Best for: Summary alerts, status updates</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>For Each Result</h3>
+                        <ul>
+                            <li>Executes actions for each matching result</li>
+                            <li>Can cause alert storms</li>
+                            <li>Example: 40 results → 40 alerts</li>
+                            <li>Best for: Individual incident tracking</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Throttling:</strong> Use to suppress duplicate alerts within specified time ranges</p>
+                </div>
+            </section>
+
+            <!-- Alert Severity and Management -->
+            <section>
+                <h2 class="session-header">Alert Severity and Management</h2>
+                <div class="key-concept">
+                    <p><strong>Organization:</strong> Classify and prioritize alerts effectively</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div>
+                        <h3>Severity Levels</h3>
+                        <ul>
+                            <li><strong>Info:</strong> Informational notifications</li>
+                            <li><strong>Low:</strong> Minor issues requiring attention</li>
+                            <li><strong>Medium:</strong> Significant events needing response</li>
+                            <li><strong>High:</strong> Critical issues requiring immediate action</li>
+                            <li><strong>Critical:</strong> Emergency situations</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Alert Management</h3>
+                        <ul>
+                            <li><strong>Triggered Alerts:</strong> View via Activity menu</li>
+                            <li><strong>Alert History:</strong> Track alert firing patterns</li>
+                            <li><strong>Alert Editing:</strong> Modify conditions and actions</li>
+                            <li><strong>Alert Suppression:</strong> Temporarily disable alerts</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Email Alert Configuration -->
+            <section>
+                <h2 class="session-header">Email Alert Configuration</h2>
+                <div class="key-concept">
+                    <p><strong>Professional Notifications:</strong> Customize email content and formatting</p>
+                </div>
+                <div class="code-scroll">
+                    <h3>Email Configuration Options:</h3>
+                    <pre><code>
+To: recipient@company.com, team@company.com
+Priority: Normal, Low, High, Highest
+Subject: Splunk Alert: $name$ (uses alert title)
+Message: Custom message with context and instructions
+
+Include Options:
+☑ Link to Alert (direct access to alert definition)
+☑ Link to Results (view triggering events)
+☑ Search String (see the search that triggered)
+☑ Trigger Condition (understand why it fired)
+☑ Trigger Time (when alert was triggered)
+☐ Inline Table (results embedded in email)
+☐ Attach CSV (results as attachment)
+☐ Attach PDF (formatted report attachment)
+
+Format Options:
+• HTML & Plain Text: Rich formatting with fallback
+• Plain Text: Simple text-only emails
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Viewing Triggered Alerts -->
+            <section>
+                <h2 class="session-header">Managing Triggered Alerts</h2>
+                <div class="key-concept">
+                    <p><strong>Monitoring and Response:</strong> Track and respond to triggered alerts</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Access Methods</h3>
+                        <ul>
+                            <li><strong>Activity Menu:</strong> Activity → Triggered Alerts</li>
+                            <li><strong>Search Interface:</strong> Direct link from alerts</li>
+                            <li><strong>Email Notifications:</strong> Click "View results" link</li>
+                            <li><strong>API Access:</strong> Programmatic alert retrieval</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Alert Actions</h3>
+                        <ul>
+                            <li><strong>View Results:</strong> See events that triggered alert</li>
+                            <li><strong>Edit Search:</strong> Modify alert definition</li>
+                            <li><strong>Clone Alert:</strong> Create similar alerts</li>
+                            <li><strong>Delete Alert:</strong> Remove obsolete alerts</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Alert Features -->
+            <section>
+                <h2 class="session-header">Advanced Alert Features</h2>
+                <div class="key-concept">
+                    <p><strong>Enterprise Capabilities:</strong> Advanced alerting for complex environments</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="key-concept">
+                        <h3>Webhook Integration</h3>
+                        <ul>
+                            <li>HTTP POST to external systems</li>
+                            <li>ITSM tool integration</li>
+                            <li>Chat platform notifications</li>
+                            <li>Custom API endpoints</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Script Execution</h3>
+                        <ul>
+                            <li>Custom Python/shell scripts</li>
+                            <li>Advanced remediation actions</li>
+                            <li>External system integration</li>
+                            <li>Complex notification logic</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Lookup Integration</h3>
+                        <ul>
+                            <li>Dynamic recipient lists</li>
+                            <li>Context enrichment</li>
+                            <li>Escalation matrices</li>
+                            <li>Asset-based routing</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Correlation Rules</h3>
+                        <ul>
+                            <li>Multi-condition alerts</li>
+                            <li>Time-based correlation</li>
+                            <li>Cross-sourcetype analysis</li>
+                            <li>Advanced threat detection</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alert Best Practices -->
+            <section>
+                <h2 class="session-header">Alert Best Practices</h2>
+                <div class="key-concept">
+                    <p><strong>Effective Alerting:</strong> Minimize noise while maximizing actionability</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Design Principles</h3>
+                        <ul>
+                            <li><strong>Actionable:</strong> Every alert should require action</li>
+                            <li><strong>Specific:</strong> Clear, descriptive alert names</li>
+                            <li><strong>Contextualized:</strong> Include relevant details</li>
+                            <li><strong>Escalated:</strong> Route to appropriate personnel</li>
+                            <li><strong>Tracked:</strong> Monitor alert effectiveness</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Common Pitfalls</h3>
+                        <ul>
+                            <li><strong>Alert Fatigue:</strong> Too many non-critical alerts</li>
+                            <li><strong>False Positives:</strong> Poorly tuned thresholds</li>
+                            <li><strong>Missing Context:</strong> Alerts without explanation</li>
+                            <li><strong>No Follow-up:</strong> Alerts without response tracking</li>
+                            <li><strong>Over-alerting:</strong> Multiple alerts for same issue</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Splunk Resources -->
+            <section>
+                <h2 class="session-header">Additional Resources</h2>
+                <div class="key-concept">
+                    <p><strong>Community and Learning:</strong> Continue your Splunk journey</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div>
+                        <h3>Official Resources</h3>
+                        <ul>
+                            <li><strong>Splunkbase:</strong> https://splunkbase.splunk.com/</li>
+                            <li><strong>Documentation:</strong> https://docs.splunk.com/</li>
+                            <li><strong>Splunk Answers:</strong> http://answers.splunk.com/</li>
+                            <li><strong>Training:</strong> https://education.splunk.com/</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Community</h3>
+                        <ul>
+                            <li><strong>User Groups:</strong> http://usergroups.splunk.com/</li>
+                            <li><strong>Blogs:</strong> http://blogs.splunk.com/</li>
+                            <li><strong>Wiki:</strong> http://wiki.splunk.com/</li>
+                            <li><strong>Conferences:</strong> .conf and regional events</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content 2 Summary -->
+            <section>
+                <h2 class="session-header">Content 2 Summary</h2>
+                <div class="key-concept">
+                    <p><strong>Advanced Analytics Skills Achieved</strong></p>
+                </div>
+                <ul>
+                    <li>✅ <strong>Statistical Analysis:</strong> Using transforming commands for business insights</li>
+                    <li>✅ <strong>Business Intelligence:</strong> Creating professional reports and dashboards</li>
+                    <li>✅ <strong>User-Friendly Analytics:</strong> Building pivot tables for business users</li>
+                    <li>✅ <strong>Data Enrichment:</strong> Implementing lookup tables for context</li>
+                    <li>✅ <strong>Automation:</strong> Setting up proactive monitoring and alerting</li>
+                    <li>✅ <strong>Optimization:</strong> Advanced search techniques and best practices</li>
+                </ul>
+            </section>
+
+            <!-- Real-World Applications -->
+            <section>
+                <h2 class="session-header">Real-World Applications</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Business Intelligence</h3>
+                        <ul>
+                            <li>Executive dashboards</li>
+                            <li>Sales performance tracking</li>
+                            <li>Customer behavior analysis</li>
+                            <li>Revenue optimization</li>
+                            <li>Market trend analysis</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Operations Management</h3>
+                        <ul>
+                            <li>Infrastructure monitoring</li>
+                            <li>Security threat detection</li>
+                            <li>Performance optimization</li>
+                            <li>Compliance reporting</li>
+                            <li>Incident response</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Impact:</strong> Transform raw data into actionable business insights</p>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section>
+                <h2 class="session-header">Continuing Your Splunk Journey</h2>
+                <div class="key-concept">
+                    <p><strong>Foundation Complete:</strong> You now have comprehensive Splunk skills!</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Immediate Next Steps</h3>
+                        <ul>
+                            <li>Practice with your own data</li>
+                            <li>Build production dashboards</li>
+                            <li>Implement monitoring alerts</li>
+                            <li>Explore advanced apps</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Advanced Learning</h3>
+                        <ul>
+                            <li>Splunk Administration</li>
+                            <li>Advanced Search Commands</li>
+                            <li>Custom Visualizations</li>
+                            <li>Machine Learning Toolkit</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Q&A and Resources -->
+            <section>
+                <h2 class="session-header">Questions & Resources</h2>
+                <div style="text-align: center;">
+                    <h3>Congratulations!</h3>
+                    <p>You've completed comprehensive Splunk Fundamentals training!</p>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Key Resources for Continued Success:</strong></p>
+                    <ul>
+                        <li>Splunk Documentation and Community</li>
+                        <li>Advanced Training Courses</li>
+                        <li>Splunk User Groups and Events</li>
+                        <li>Professional Certification Paths</li>
+                        <li>Partner with Splunk Experts</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade'
+        });
+    </script>
+</body>
+</html>
