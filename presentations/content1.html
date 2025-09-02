@@ -7,34 +7,108 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
     <style>
-        .reveal h1, .reveal h2 {
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 20px;
-            border-radius: 5px;
+        .reveal .slides section {
+            height: 100vh;
+            top: 0 !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 15px;
+            overflow: hidden;
+            box-sizing: border-box;
         }
-        .reveal .session-header {
+        .reveal .slides section > * {
+            flex-shrink: 0;
+        }
+        .reveal h1 {
+            font-size: 1.8em;
             background-color: #f0f0f0;
             color: #333;
             padding: 15px;
             border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .reveal h2 {
+            font-size: 1.4em;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .reveal h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .reveal .session-header {
+            font-size: 1.3em;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .reveal ul, .reveal ol {
+            display: block;
+            margin-left: 0.8em;
+            font-size: 0.75em;
+            line-height: 1.3;
+        }
+        .reveal li {
+            margin-bottom: 0.3em;
         }
         .lab-callout {
             background-color: #e3f2fd;
             border: 3px solid #2196f3;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             text-align: center;
+            font-size: 0.9em;
+        }
+        .lab-callout h2 {
+            font-size: 1.2em;
+            background: none;
+            padding: 0;
+            margin-bottom: 10px;
+        }
+        .lab-callout h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
         }
         .code-scroll {
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
         }
         .key-concept {
             background-color: #fff3e0;
             border-left: 5px solid #ff9800;
-            padding: 15px;
-            margin: 10px 0;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 0.8em;
+        }
+        .reveal pre {
+            font-size: 0.48em;
+            line-height: 1.15;
+            margin: 0;
+        }
+        .reveal p {
+            font-size: 0.85em;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .reveal code {
+            font-size: 0.9em;
+        }
+        /* Compact grid layouts */
+        .reveal section > div[style*="grid"] {
+            gap: 10px !important;
+        }
+        /* Reduce spacing in nested divs */
+        .reveal section div div {
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -116,37 +190,46 @@
                 </div>
             </section>
 
-            <!-- Splunk Components -->
+            <!-- Splunk Components - Part 1 -->
             <section>
-                <h2 class="session-header">Splunk Architecture Components</h2>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <h2 class="session-header">Splunk Architecture: Core Components</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                     <div class="key-concept">
                         <h3>Indexer</h3>
                         <p>Stores and processes data</p>
                         <ul>
-                            <li>Data storage</li>
-                            <li>Index management</li>
-                            <li>Search execution</li>
+                            <li>Data storage in indexes</li>
+                            <li>Index management and optimization</li>
+                            <li>Search execution and retrieval</li>
+                            <li>Data compression and retention</li>
                         </ul>
                     </div>
                     <div class="key-concept">
                         <h3>Search Head</h3>
                         <p>User interface and search coordination</p>
                         <ul>
-                            <li>Web interface</li>
-                            <li>Search management</li>
-                            <li>Dashboards</li>
+                            <li>Web-based interface</li>
+                            <li>Search management and scheduling</li>
+                            <li>Dashboards and visualizations</li>
+                            <li>User authentication and roles</li>
                         </ul>
                     </div>
-                    <div class="key-concept">
-                        <h3>Forwarder</h3>
-                        <p>Data collection and forwarding</p>
-                        <ul>
-                            <li>Data input</li>
-                            <li>Parsing</li>
-                            <li>Forwarding</li>
-                        </ul>
-                    </div>
+                </div>
+            </section>
+
+            <!-- Splunk Components - Part 2 -->
+            <section>
+                <h2 class="session-header">Splunk Architecture: Data Collection</h2>
+                <div class="key-concept" style="max-width: 600px; margin: 0 auto;">
+                    <h3>Forwarder</h3>
+                    <p>Data collection and forwarding agent</p>
+                    <ul>
+                        <li><strong>Universal Forwarder:</strong> Lightweight data collection</li>
+                        <li><strong>Heavy Forwarder:</strong> Full processing capabilities</li>
+                        <li><strong>Data Input:</strong> Files, network streams, APIs</li>
+                        <li><strong>Parsing:</strong> Event breaking and field extraction</li>
+                        <li><strong>Load Balancing:</strong> Distributes data across indexers</li>
+                    </ul>
                 </div>
             </section>
 
@@ -454,8 +537,7 @@ index=web error failed authentication
                         <div class="code-scroll">
                             <pre><code>
 # Excluding many values
-index=main NOT (status=200 OR status=201 
-OR status=202 OR status=304)
+index=main NOT (status=200 OR status=201)
 
 # Using NOT extensively
 index=web NOT success NOT debug
@@ -475,46 +557,9 @@ index=web error failed exception
                         </div>
                     </div>
                 </div>
-                <p><strong>Note:</strong> != vs NOT - Both exclude results, but != operates at field level</p>
-            </section>
-
-            <!-- != vs NOT Comparison -->
-            <section>
-                <h2 class="session-header">Understanding != vs NOT</h2>
                 <div class="key-concept">
-                    <p><strong>Key Difference:</strong> Field-level vs search-level exclusion</p>
+                    <p><strong>!= vs NOT:</strong> != works on fields (status!=200), NOT works on text (NOT error)</p>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <h3>!= (Field Comparison)</h3>
-                        <div class="code-scroll">
-                            <pre><code>
-# Excludes events where status field ≠ 200
-index=main status!=200
-
-# Only works with extracted fields
-index=web method!="POST"
-
-# Field must exist and not equal value
-                            </code></pre>
-                        </div>
-                    </div>
-                    <div>
-                        <h3>NOT (Search Term)</h3>
-                        <div class="code-scroll">
-                            <pre><code>
-# Excludes events containing "200" anywhere
-index=main NOT 200
-
-# Works with any text in raw event
-index=web NOT POST
-
-# Broader exclusion scope
-                            </code></pre>
-                        </div>
-                    </div>
-                </div>
-                <p><strong>Best Practice:</strong> Use != for precise field exclusion, NOT for broader text exclusion</p>
             </section>
 
             <!-- Best Practice #5: Filter Early -->
@@ -599,39 +644,64 @@ index=main "error" (instead of "error*")
                 <p><strong>Performance Impact:</strong> Leading wildcards can be 100x slower than trailing wildcards</p>
             </section>
 
-            <!-- SPL Component Breakdown -->
+            <!-- SPL Component Breakdown - Part 1 -->
             <section>
-                <h2 class="session-header">SPL: Five Basic Components</h2>
+                <h2 class="session-header">SPL: Core Components</h2>
                 <div class="key-concept">
                     <p><strong>Understanding:</strong> Every SPL search contains up to five component types</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                     <div class="key-concept">
                         <h3>1. Search Terms</h3>
                         <p>Keywords, field=value pairs, quoted strings</p>
                         <code>error status=404 "login failed"</code>
+                        <ul>
+                            <li>Filter events at index level</li>
+                            <li>Most efficient component</li>
+                        </ul>
                     </div>
                     <div class="key-concept">
                         <h3>2. Commands</h3>
                         <p>Processing instructions that manipulate results</p>
-                        <code>stats, eval, where, sort</code>
+                        <code>stats, eval, where, sort, table</code>
+                        <ul>
+                            <li>Transform and format data</li>
+                            <li>Connected by pipe (|) symbols</li>
+                        </ul>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+            </section>
+
+            <!-- SPL Component Breakdown - Part 2 -->
+            <section>
+                <h2 class="session-header">SPL: Advanced Components</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                     <div class="key-concept">
                         <h3>3. Functions</h3>
                         <p>Operations within commands</p>
                         <code>count(), avg(), max()</code>
+                        <ul>
+                            <li>Statistical operations</li>
+                            <li>Mathematical calculations</li>
+                        </ul>
                     </div>
                     <div class="key-concept">
                         <h3>4. Arguments</h3>
                         <p>Values that modify command behavior</p>
                         <code>limit=10, by host</code>
+                        <ul>
+                            <li>Command parameters</li>
+                            <li>Control processing</li>
+                        </ul>
                     </div>
                     <div class="key-concept">
                         <h3>5. Clauses</h3>
                         <p>Modify how commands process data</p>
                         <code>BY, AS, WHERE, OVER</code>
+                        <ul>
+                            <li>Grouping and filtering</li>
+                            <li>Field naming and logic</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -925,88 +995,72 @@ host=web*
                 </div>
             </section>
 
-            <!-- Fields Command -->
+            <!-- Core Commands: Data Selection -->
             <section>
-                <h2 class="session-header">The fields Command</h2>
-                <div class="key-concept">
-                    <p><strong>Purpose:</strong> Specify which fields to include or exclude from results</p>
-                </div>
-                <div class="code-scroll">
-                    <pre><code>
-# Include specific fields
-index=main | fields host, sourcetype, _time
+                <h2 class="session-header">Data Selection Commands</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>fields Command</h3>
+                        <p>Include or exclude specific fields</p>
+                        <div class="code-scroll">
+                            <pre><code>
+# Include fields
+| fields host, status, _time
 
-# Exclude fields (use minus sign)
-index=main | fields - _raw, _indextime
+# Exclude fields
+| fields - _raw, _indextime
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div class="key-concept">
+                        <h3>table Command</h3>
+                        <p>Display results in tabular format</p>
+                        <div class="code-scroll">
+                            <pre><code>
+# Organize columns
+| table _time, host, status
 
-# Performance benefit: reduces data processing
-index=main | fields clientip, status | stats count by clientip
-                    </code></pre>
+# Order matters
+| table status, host, _time
+                            </code></pre>
+                        </div>
+                    </div>
                 </div>
-                <p><strong>Best Practice:</strong> Use early in search pipeline for performance</p>
+                <p><strong>Performance Tip:</strong> Use fields command early in pipeline</p>
             </section>
 
-            <!-- Table Command -->
+            <!-- Core Commands: Data Transformation -->
             <section>
-                <h2 class="session-header">The table Command</h2>
-                <div class="key-concept">
-                    <p><strong>Purpose:</strong> Display results in organized tabular format</p>
+                <h2 class="session-header">Data Transformation Commands</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>rename Command</h3>
+                        <p>Change field names for clarity</p>
+                        <div class="code-scroll">
+                            <pre><code>
+# Single field
+| rename clientip as "Client IP"
+
+# Multiple fields
+| rename clientip as IP, status as Code
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div class="key-concept">
+                        <h3>dedup Command</h3>
+                        <p>Remove duplicate records</p>
+                        <div class="code-scroll">
+                            <pre><code>
+# By single field
+| dedup clientip
+
+# By multiple fields
+| dedup clientip, useragent
+                            </code></pre>
+                        </div>
+                    </div>
                 </div>
-                <div class="code-scroll">
-                    <pre><code>
-# Create table with specific columns
-index=main | table _time, host, status
-
-# Column order matters
-index=main | table status, host, _time
-
-# Combine with other commands
-index=main | stats count by host | table host, count
-                    </code></pre>
-                </div>
-                <p><strong>Use Case:</strong> Clean, readable reports for stakeholders</p>
-            </section>
-
-            <!-- Rename Command -->
-            <section>
-                <h2 class="session-header">The rename Command</h2>
-                <div class="key-concept">
-                    <p><strong>Purpose:</strong> Change field names for clarity or business alignment</p>
-                </div>
-                <div class="code-scroll">
-                    <pre><code>
-# Rename single field
-index=main | rename clientip as "Client IP"
-
-# Rename multiple fields
-index=main | rename clientip as IP, status as "Status Code"
-
-# Business-friendly naming
-index=main | rename JSESSIONID as "User Session"
-                    </code></pre>
-                </div>
-                <p><strong>Business Value:</strong> Aligns technical fields with business terminology</p>
-            </section>
-
-            <!-- Dedup Command -->
-            <section>
-                <h2 class="session-header">The dedup Command</h2>
-                <div class="key-concept">
-                    <p><strong>Purpose:</strong> Remove duplicate records based on specified fields</p>
-                </div>
-                <div class="code-scroll">
-                    <pre><code>
-# Remove duplicates by single field
-index=main | dedup clientip
-
-# Remove duplicates by multiple fields
-index=main | dedup clientip, useragent
-
-# Keep first N duplicates
-index=main | dedup clientip keepevents=true
-                    </code></pre>
-                </div>
-                <p><strong>Performance Tip:</strong> Place early in pipeline when possible</p>
+                <p><strong>Best Practice:</strong> Use rename for business-friendly field names</p>
             </section>
 
             <!-- Lab 4 Callout -->
@@ -1057,24 +1111,25 @@ index=main | dedup clientip keepevents=true
 
             <!-- Troubleshooting Common Issues -->
             <section>
-                <h2 class="session-header">Common Search Issues</h2>
+                <h2 class="session-header">Search Troubleshooting</h2>
+                <div class="key-concept">
+                    <p><strong>Quick Solutions:</strong> Common problems and fixes</p>
+                </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <h3>No Results</h3>
+                    <div class="key-concept">
+                        <h3>No Results?</h3>
                         <ul>
-                            <li>Check time range</li>
-                            <li>Verify field names (case-sensitive)</li>
-                            <li>Remove restrictive filters</li>
-                            <li>Use wildcards for testing</li>
+                            <li>Expand time range</li>
+                            <li>Check field name casing</li>
+                            <li>Try wildcards (host=web*)</li>
                         </ul>
                     </div>
-                    <div>
-                        <h3>Slow Performance</h3>
+                    <div class="key-concept">
+                        <h3>Slow Performance?</h3>
                         <ul>
                             <li>Narrow time range</li>
-                            <li>Use specific indexes</li>
-                            <li>Filter before transforming</li>
-                            <li>Limit field extraction</li>
+                            <li>Add index specification</li>
+                            <li>Filter early in pipeline</li>
                         </ul>
                     </div>
                 </div>
