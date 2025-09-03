@@ -6,14 +6,25 @@
     <title>Splunk Fundamentals - Content 1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/zoom/zoom.css">
     <style>
+        /* Global scaling for better fit */
+        .reveal {
+            font-size: 24px;
+        }
+        .reveal .slides {
+            width: 100%;
+            height: 100%;
+            zoom: 0.8;
+        }
         .reveal .slides section {
-            height: 100vh;
+            width: 100%;
+            height: 700px;
             top: 0 !important;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            padding: 15px;
+            padding: 20px 30px;
             overflow: hidden;
             box-sizing: border-box;
         }
@@ -21,94 +32,95 @@
             flex-shrink: 0;
         }
         .reveal h1 {
-            font-size: 1.8em;
+            font-size: 2em;
             background-color: #f0f0f0;
             color: #333;
-            padding: 15px;
+            padding: 18px;
             border-radius: 5px;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         .reveal h2 {
-            font-size: 1.4em;
+            font-size: 1.6em;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 14px;
+            border-radius: 5px;
+            margin-bottom: 16px;
+        }
+        .reveal h3 {
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+        .reveal .session-header {
+            font-size: 1.5em;
             background-color: #f0f0f0;
             color: #333;
             padding: 12px;
             border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        .reveal h3 {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-        .reveal .session-header {
-            font-size: 1.3em;
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .reveal ul, .reveal ol {
             display: block;
-            margin-left: 0.8em;
-            font-size: 0.75em;
-            line-height: 1.3;
+            margin-left: 1em;
+            font-size: 0.9em;
+            line-height: 1.4;
         }
         .reveal li {
-            margin-bottom: 0.3em;
+            margin-bottom: 0.4em;
         }
         .lab-callout {
             background-color: #e3f2fd;
             border: 3px solid #2196f3;
-            padding: 15px;
+            padding: 18px;
             border-radius: 10px;
             text-align: center;
-            font-size: 0.9em;
+            font-size: 0.95em;
         }
         .lab-callout h2 {
-            font-size: 1.2em;
+            font-size: 1.3em;
             background: none;
             padding: 0;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .lab-callout h3 {
-            font-size: 1em;
-            margin-bottom: 8px;
+            font-size: 1.05em;
+            margin-bottom: 10px;
         }
         .code-scroll {
-            max-height: 350px;
+            max-height: 380px;
             overflow-y: auto;
             border: 1px solid #ddd;
             border-radius: 5px;
-            padding: 5px;
+            padding: 8px;
+            background-color: #f8f8f8;
         }
         .key-concept {
             background-color: #fff3e0;
             border-left: 5px solid #ff9800;
-            padding: 10px;
-            margin: 8px 0;
-            font-size: 0.8em;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 0.9em;
         }
         .reveal pre {
-            font-size: 0.48em;
-            line-height: 1.15;
+            font-size: 0.6em;
+            line-height: 1.25;
             margin: 0;
         }
         .reveal p {
-            font-size: 0.85em;
-            line-height: 1.2;
-            margin-bottom: 10px;
+            font-size: 0.95em;
+            line-height: 1.35;
+            margin-bottom: 12px;
         }
         .reveal code {
             font-size: 0.9em;
         }
         /* Compact grid layouts */
         .reveal section > div[style*="grid"] {
-            gap: 10px !important;
+            gap: 12px !important;
         }
         /* Reduce spacing in nested divs */
         .reveal section div div {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
     </style>
 </head>
@@ -1188,12 +1200,20 @@ host=web*
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/zoom/zoom.js"></script>
     <script>
         Reveal.initialize({
             hash: true,
             transition: 'slide',
             transitionSpeed: 'fast',
-            backgroundTransition: 'fade'
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.05,
+            minScale: 0.2,
+            maxScale: 2.0,
+            center: false,
+            plugins: [ RevealZoom ]
         });
     </script>
 </body>
