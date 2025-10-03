@@ -1,5 +1,2 @@
 @echo off
-echo Pulling latest changes from repository...
-cd /d C:\Users\Administrator\splunk_fund_v3
-git pull
-echo Pull complete!
+powershell -Command "Set-Location C:\Users\Administrator\splunk_fund_v3; Write-Host 'Pulling latest changes from repository...' -ForegroundColor Green; git pull; Write-Host 'Pull complete!' -ForegroundColor Green"
