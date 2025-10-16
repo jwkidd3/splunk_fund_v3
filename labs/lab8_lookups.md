@@ -1,8 +1,6 @@
 # Lab 8: Creating and Using Lookups in Splunk
 *Day 2 - Lab 4 of 5*
 
-## Duration: 90 minutes
-
 ## Lab Overview
 
 In this lab, you will learn to enrich your Splunk data using lookup tables. You'll create lookup files that add business context to raw event data, configure automatic lookups to seamlessly integrate this information, and use lookup commands to enhance your reports with meaningful product names and pricing information.

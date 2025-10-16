@@ -1,8 +1,6 @@
 # Lab 5: Transforming Commands in Splunk
 *Day 2 - Lab 1 of 5*
 
-## Duration: 90 minutes
-
 ## Lab Overview
 
 In this lab, you will master Splunk's transforming commands to derive meaningful statistics and insights from your data. You'll work with real-world scenarios involving web application logs, database audit trails, and system logs to understand how transforming commands can help answer business questions.

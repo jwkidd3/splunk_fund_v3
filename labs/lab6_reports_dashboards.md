@@ -1,8 +1,6 @@
 # Lab 6: Creating Reports and Dashboards in Splunk
 *Day 2 - Lab 2 of 5*
 
-## Duration: 90 minutes
-
 ## Lab Overview
 
 In this lab, you will build reports and dashboards for various stakeholders at Buttercup Games. You'll learn how to save searches as reports, create visualizations, build interactive dashboards, and manage permissions to share your work with others.

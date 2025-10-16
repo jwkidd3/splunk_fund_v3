@@ -22,11 +22,8 @@ There is reason to believe there might be a security issue with your web server.
 ## Data Sources
 This lab uses the following data types:
 - **Web Application** (sourcetype: `access_combined_wcookie`)
-- **Database** (sourcetype: `db_audit`) 
+- **Database** (sourcetype: `db_audit`)
 - **Web Server** (sourcetype: `linux_secure`)
-
-## Lab Duration
-Estimated time: 45 minutes
 
 ---
 

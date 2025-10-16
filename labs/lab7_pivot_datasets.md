@@ -1,8 +1,6 @@
 # Lab 7: Using Pivot and Datasets in Splunk
 *Day 2 - Lab 3 of 5*
 
-## Duration: 90 minutes
-
 ## Lab Overview
 
 In this lab, you will learn to use Splunk's Pivot interface to create visualizations without writing complex searches. You'll build reports for business users using the drag-and-drop Pivot interface, create datasets for reusable analysis, and understand how Pivot transforms raw data into meaningful insights.

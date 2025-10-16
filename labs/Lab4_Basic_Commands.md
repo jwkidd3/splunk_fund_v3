@@ -25,9 +25,6 @@ This lab focuses on web application data:
 - **Web Application** (sourcetype: `access_combined_wcookie`)
   - Key fields: action, bytes, categoryId, clientip, itemId, JSESSIONID, productId, referer, referer_domain, status, useragent, file
 
-## Lab Duration
-Estimated time: 60 minutes
-
 ---
 
 ## Task 1: Search for Campaign Purchase Data

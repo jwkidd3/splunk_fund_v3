@@ -1,8 +1,6 @@
 # Lab 9: Creating Alerts in Splunk
 *Day 2 - Lab 5 of 5*
 
-## Duration: 90 minutes
-
 ⚠️ **WARNING**: This lab requires a Splunk Enterprise trial or paid license. It will not work with the free license version.
 
 ## Lab Overview
