@@ -1,5 +1,4 @@
 # Lab 3: Using Fields in Searches
-*Day 1 - Lab 3 of 4*
 
 ## Learning Objectives
 After completing this lab, you will be able to:

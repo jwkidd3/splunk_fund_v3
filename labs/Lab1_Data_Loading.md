@@ -1,5 +1,4 @@
 # Lab 1: Data Loading and Environment Setup
-*Day 1 - Lab 1 of 4*
 
 ## Learning Objectives
 By completing this lab, you will:

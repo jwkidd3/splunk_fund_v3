@@ -1,5 +1,4 @@
 # Lab 2: Basic Searching with Splunk Search Language
-*Day 1 - Lab 2 of 4*
 
 ## Learning Objectives
 After completing this lab, you will be able to:

@@ -1,5 +1,4 @@
 # Lab 7: Using Pivot and Datasets in Splunk
-*Day 2 - Lab 3 of 5*
 
 ## Lab Overview
 

@@ -1,5 +1,4 @@
 # Lab 8: Creating and Using Lookups in Splunk
-*Day 2 - Lab 4 of 5*
 
 ## Lab Overview
 

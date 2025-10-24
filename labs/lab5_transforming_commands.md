@@ -1,5 +1,4 @@
 # Lab 5: Transforming Commands in Splunk
-*Day 2 - Lab 1 of 5*
 
 ## Lab Overview
 

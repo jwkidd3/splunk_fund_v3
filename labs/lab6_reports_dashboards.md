@@ -1,5 +1,4 @@
 # Lab 6: Creating Reports and Dashboards in Splunk
-*Day 2 - Lab 2 of 5*
 
 ## Lab Overview
 

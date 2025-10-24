@@ -1,5 +1,4 @@
 # Lab 4: Basic Splunk Commands
-*Day 1 - Lab 4 of 4*
 
 ## Learning Objectives
 After completing this lab, you will be able to:

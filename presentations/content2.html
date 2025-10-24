@@ -25,7 +25,8 @@
             flex-direction: column;
             justify-content: flex-start;
             padding: 20px 30px;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             box-sizing: border-box;
         }
         .reveal .slides section > * {
@@ -121,6 +122,21 @@
         /* Reduce spacing in nested divs */
         .reveal section div div {
             margin-bottom: 6px;
+        }
+        /* Scrollbar styling for better visibility */
+        .reveal .slides section::-webkit-scrollbar {
+            width: 8px;
+        }
+        .reveal .slides section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .reveal .slides section::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .reveal .slides section::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
     </style>
 </head>
@@ -463,7 +479,6 @@ index=sales sourcetype=vendor_sales
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 5: Transforming Commands</h2>
-                    <p><strong>Duration:</strong> 90 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Use top and rare commands for frequency analysis</li>
@@ -609,7 +624,6 @@ index=sales sourcetype=vendor_sales
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 6: Creating Reports and Dashboards</h2>
-                    <p><strong>Duration:</strong> 75 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Save searches as reusable reports</li>
@@ -716,7 +730,6 @@ index=sales sourcetype=vendor_sales
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 7: Pivot Tables and Datasets</h2>
-                    <p><strong>Duration:</strong> 60 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Navigate the Datasets interface</li>
@@ -885,7 +898,6 @@ index=main sourcetype=access_combined file=success.do status=200
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 8: Creating and Using Lookups</h2>
-                    <p><strong>Duration:</strong> 90 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Upload and configure lookup table files</li>
@@ -1307,7 +1319,6 @@ Format Options:
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 9: Alerts and Scheduled Reports</h2>
-                    <p><strong>Duration:</strong> 60 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Create real-time and scheduled alerts</li>

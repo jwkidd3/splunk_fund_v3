@@ -25,7 +25,8 @@
             flex-direction: column;
             justify-content: flex-start;
             padding: 20px 30px;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             box-sizing: border-box;
         }
         .reveal .slides section > * {
@@ -122,6 +123,21 @@
         .reveal section div div {
             margin-bottom: 6px;
         }
+        /* Scrollbar styling for better visibility */
+        .reveal .slides section::-webkit-scrollbar {
+            width: 8px;
+        }
+        .reveal .slides section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .reveal .slides section::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .reveal .slides section::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
 <body>
@@ -139,7 +155,6 @@
             <section>
                 <h2 class="session-header">Course Overview</h2>
                 <ul>
-                    <li><strong>Duration:</strong> 2-day intensive course</li>
                     <li><strong>Focus:</strong> Hands-on practical learning</li>
                     <li><strong>Environment:</strong> Individual Splunk instances</li>
                     <li><strong>Scenario:</strong> Buttercup Games company data</li>
@@ -316,7 +331,6 @@
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 1: Data Loading and Environment Setup</h2>
-                    <p><strong>Duration:</strong> 45 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Upload data files to Splunk Enterprise</li>
@@ -856,11 +870,72 @@ method=GET or method=get (both work)
                 <p><strong>Tip:</strong> Use Field Sidebar to see exact field name casing</p>
             </section>
 
+            <!-- Timeline Visualization -->
+            <section>
+                <h2 class="session-header">Using the Timeline</h2>
+                <div class="key-concept">
+                    <p><strong>Timeline:</strong> Visual representation showing event distribution over time</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3>Timeline Features</h3>
+                        <ul>
+                            <li><strong>Event Distribution:</strong> See when events occurred</li>
+                            <li><strong>Pattern Recognition:</strong> Identify spikes and gaps</li>
+                            <li><strong>Interactive:</strong> Click to zoom into time periods</li>
+                            <li><strong>Color Coding:</strong> Different event types shown in color</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Timeline Actions</h3>
+                        <ul>
+                            <li><strong>Single Click:</strong> View events in that time bucket</li>
+                            <li><strong>Double Click:</strong> Zoom into that time range</li>
+                            <li><strong>Hover:</strong> See exact event count for period</li>
+                            <li><strong>Drag:</strong> Select custom time range</li>
+                        </ul>
+                    </div>
+                </div>
+                <p><strong>Use Case:</strong> Quickly identify anomalies, incidents, or unusual activity patterns</p>
+            </section>
+
+            <!-- Search History and Jobs -->
+            <section>
+                <h2 class="session-header">Search History vs Search Jobs</h2>
+                <div class="key-concept">
+                    <p><strong>Purpose:</strong> Reuse and manage previous searches efficiently</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="key-concept">
+                        <h3>Search History</h3>
+                        <ul>
+                            <li><strong>What:</strong> List of searches you've run</li>
+                            <li><strong>Access:</strong> Activity → Search History</li>
+                            <li><strong>Contains:</strong> Search string and time range</li>
+                            <li><strong>Action:</strong> Click to re-run search</li>
+                            <li><strong>Retention:</strong> Stores search queries only</li>
+                        </ul>
+                    </div>
+                    <div class="key-concept">
+                        <h3>Search Jobs</h3>
+                        <ul>
+                            <li><strong>What:</strong> Saved search results</li>
+                            <li><strong>Access:</strong> Activity → Jobs</li>
+                            <li><strong>Contains:</strong> Actual search results data</li>
+                            <li><strong>Action:</strong> View cached results instantly</li>
+                            <li><strong>Retention:</strong> Default 10 minutes (configurable)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="key-concept">
+                    <p><strong>Best Practice:</strong> Extend job lifetime for important searches you'll reference multiple times</p>
+                </div>
+            </section>
+
             <!-- Lab 2 Callout -->
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 2: Basic Searching with SPL</h2>
-                    <p><strong>Duration:</strong> 60 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Construct basic SPL searches</li>
@@ -970,7 +1045,6 @@ host=web*
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 3: Using Fields in Searches</h2>
-                    <p><strong>Duration:</strong> 45 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Identify and use extracted fields</li>
@@ -1082,7 +1156,6 @@ host=web*
             <section>
                 <div class="lab-callout">
                     <h2>🧪 Lab 4: Basic Splunk Commands</h2>
-                    <p><strong>Duration:</strong> 60 minutes</p>
                     <h3>What You'll Learn:</h3>
                     <ul style="text-align: left; display: inline-block;">
                         <li>Use fields command for performance optimization</li>
