@@ -217,10 +217,10 @@ index=main sourcetype=access_combined_wcookie action=purchase status=200
 ### Marketing Campaign Performance
 ```splunk
 # Analyze unique sessions per marketing campaign
-index=main sourcetype=access_combined_wcookie action=purchase 
-| dedup JSESSIONID 
-| stats count by referer_domain 
-| rename referer_domain as "Campaign Source", count as "Unique Sessions"
+index=main sourcetype=access_combined_wcookie action=purchase
+| dedup JSESSIONID
+| stats count by referer
+| rename referer as "Campaign Source", count as "Unique Sessions"
 ```
 
 ### Customer Journey Analysis
