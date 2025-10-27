@@ -241,23 +241,26 @@ class DataGenerator:
         print(f"Generated {len(logs)} database audit logs in {output_file}")
         return logs
     
-    def generate_linux_security_logs(self, count=5000):
-        """Generate Linux security logs"""
-        
-        # Common patterns from original data
-        failed_users = ["zabbix", "operator", "dba", "admin", "root", "oracle", "postgres", "mysql"]
-        valid_users = ["nsharpe", "djohnson", "admin", "root", "user1", "analyst"]
-        
+    def generate_linux_security_logs(self, count=8000):
+        """Generate Linux security logs with realistic SSH attack patterns"""
+
+        # Common patterns from original data - expanded list
+        failed_users = ["zabbix", "operator", "dba", "admin", "root", "oracle", "postgres",
+                       "mysql", "backup", "test", "git", "jenkins", "ubuntu", "user", "guest"]
+        valid_users = ["nsharpe", "djohnson", "admin", "root", "user1", "analyst", "sysadmin"]
+
         # Source IPs - mix of suspicious and legitimate
-        suspicious_ips = ["208.65.153.253", "202.179.8.245", "94.102.49.190", "185.234.218.110"]
-        legitimate_ips = ["192.168.1.100", "10.0.0.50", "172.16.0.10"]
-        
+        suspicious_ips = ["208.65.153.253", "202.179.8.245", "94.102.49.190", "185.234.218.110",
+                         "103.99.0.122", "198.51.100.42", "45.33.32.156", "167.71.5.83"]
+        legitimate_ips = ["192.168.1.100", "10.0.0.50", "172.16.0.10", "192.168.1.50"]
+
         log_patterns = [
-            {"type": "failed_password", "weight": 0.40},
-            {"type": "successful_login", "weight": 0.30},
-            {"type": "session_opened", "weight": 0.15},
+            {"type": "failed_password", "weight": 0.45},  # More failed attempts for realism
+            {"type": "successful_login", "weight": 0.25},
+            {"type": "session_opened", "weight": 0.12},
             {"type": "session_closed", "weight": 0.10},
-            {"type": "server_events", "weight": 0.05}
+            {"type": "invalid_user", "weight": 0.05},     # New: explicitly invalid user attempts
+            {"type": "server_events", "weight": 0.03}
         ]
         
         logs = []
@@ -287,10 +290,15 @@ class DataGenerator:
                 else:
                     user = random.choice(valid_users)
                     user_desc = user
-                
+
                 ip = random.choice(suspicious_ips)
-                port = random.randint(22, 65535)
-                
+                # 75% of failed attempts are on port 22 (realistic SSH brute force)
+                # 25% are on random high ports (port scanning attempts)
+                if random.random() < 0.75:
+                    port = 22
+                else:
+                    port = random.randint(2222, 65535)
+
                 log_line = (f'{timestamp.strftime("%a %b %d %Y %H:%M:%S")} www1 '
                            f'sshd[{pid}]: Failed password for {user_desc} from {ip} port {port} ssh2')
                 
@@ -311,10 +319,19 @@ class DataGenerator:
                 
             elif selected_pattern == "session_closed":
                 user = random.choice(valid_users)
-                
+
                 log_line = (f'{timestamp.strftime("%a %b %d %Y %H:%M:%S")} www1 '
                            f'sshd[{pid}]: pam_unix(sshd:session): session closed for user {user}')
-                
+
+            elif selected_pattern == "invalid_user":
+                # Explicit invalid user attempts (common in brute force attacks)
+                user = random.choice(failed_users + ["admin123", "administrator", "test123", "default"])
+                ip = random.choice(suspicious_ips)
+                port = 22  # Always port 22 for these
+
+                log_line = (f'{timestamp.strftime("%a %b %d %Y %H:%M:%S")} www1 '
+                           f'sshd[{pid}]: Invalid user {user} from {ip} port {port}')
+
             else:  # server_events
                 events = [
                     f'sshd[{pid}]: Server listening on :: port 22.',
