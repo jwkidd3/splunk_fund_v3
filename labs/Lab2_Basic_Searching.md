@@ -43,12 +43,13 @@ This lab uses the following data types:
    - Review search results and observe highlighted search terms
    - Use pagination to browse through results
    - Note the host, source, and sourcetype values at the bottom of each event
-   - Observe events from both `web_application` and `web_server` hosts
+   - Observe that most results come from `web_server` host (Linux secure logs)
+   - Notice the search terms are highlighted in yellow within the events
 
 ### Validation:
 - [ ] Search executed successfully
-- [ ] Results show highlighted search terms
-- [ ] Multiple hosts visible in results
+- [ ] Results show highlighted search terms ("error", "fail", "failed", "failure")
+- [ ] Events primarily from web_server host with linux_secure sourcetype
 - [ ] Can navigate through paginated results
 
 ---
