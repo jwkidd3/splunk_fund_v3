@@ -360,18 +360,18 @@ This lab covered fundamental Splunk commands for data manipulation and reporting
 
 ---
 
-## 🎯 End of Day 1
+## End of Content 1
 
-**Congratulations!** You have completed Day 1 of the Splunk Fundamentals course.
+**Congratulations!** You have completed the Content 1 labs for the Splunk Fundamentals course.
 
-### Day 1 Summary
-✅ **Lab 1**: Data Loading and Environment Setup  
-✅ **Lab 2**: Basic Searching with Splunk Search Language  
-✅ **Lab 3**: Using Fields in Searches  
-✅ **Lab 4**: Basic Splunk Commands  
+### Content 1 Summary
+✅ **Lab 1**: Data Loading and Environment Setup
+✅ **Lab 2**: Basic Searching with Splunk Search Language
+✅ **Lab 3**: Using Fields in Searches
+✅ **Lab 4**: Basic Splunk Commands
 
-### Tomorrow (Day 2)
-Day 2 will focus on advanced analysis and reporting:
+### Coming Up in Content 2
+Content 2 will focus on advanced analysis and reporting:
 - **Lab 5**: Transforming Commands (statistical analysis)
 - **Lab 6**: Reports and Dashboards (visualization)
 - **Lab 7**: Pivot and Datasets (business user tools)

@@ -52,7 +52,7 @@ This lab focuses on web application data:
 
 5. **Analyze Status Field**
    - In Fields sidebar, under **Interesting Fields**, click **status**
-   - Note that status codes > 200 indicate customer interaction errors
+   - Note that status codes >= 400 indicate customer interaction errors
    - Review the status code distribution
 
 6. **Select Fields for Display**
@@ -211,7 +211,7 @@ This lab focuses on web application data:
 - **200**: Success - transaction completed
 - **4xx**: Client errors (400, 404, etc.)
 - **5xx**: Server errors (500, 503, etc.)
-- **Business Impact**: Status codes > 200 indicate lost sales
+- **Business Impact**: Status codes >= 400 indicate lost sales
 
 ## Real-World Applications
 

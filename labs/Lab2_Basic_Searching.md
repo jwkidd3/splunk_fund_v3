@@ -281,10 +281,10 @@ After completing this lab, verify your skills by:
 ## Next Steps
 
 This lab covered fundamental searching techniques. In the next lab, you will learn about:
-- Advanced search commands and functions
-- Statistical analysis and reporting
-- Data visualization and dashboards
-- Automated alerting and monitoring
+- Using the Fields sidebar to analyze search results
+- Filtering searches using field values and comparison operators
+- Navigating and utilizing Search History
+- Managing search jobs
 
 ## Additional Resources
 

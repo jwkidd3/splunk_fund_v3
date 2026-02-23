@@ -18,15 +18,15 @@ By the end of this lab, you will be able to:
 
 ---
 
-## 🚀 Welcome to Day 2!
+## 🚀 Welcome to Content 2!
 
-Today you'll learn advanced Splunk analysis and reporting techniques. You'll build on the fundamental search skills from Day 1 to create statistical reports, dashboards, and automated monitoring.
+In this section you'll learn advanced Splunk analysis and reporting techniques. You'll build on the fundamental search skills from Content 1 to create statistical reports, dashboards, and automated monitoring.
 
 ---
 
 ## Prerequisites
 
-- Completed Labs 1-4 (Day 1)
+- Completed Labs 1-4 (Content 1)
 - Basic understanding of Splunk search syntax
 - Familiarity with field extraction and filtering
 
@@ -332,18 +332,19 @@ index=main sourcetype=access_combined_wcookie
 ### Task 7.3: Add Usage Counts
 
 ```spl
-index=main sourcetype=access_combined_wcookie 
-| stats values(useragent) as "Agents used" 
-        count as "Times used" by useragent
+index=main sourcetype=access_combined_wcookie
+| stats count as "Times used" by useragent
+| sort -"Times used"
 ```
 
 ### Task 7.4: Format as Table
 
 ```spl
-index=main sourcetype=access_combined_wcookie 
-| stats values(useragent) as "Agents used" 
-        count as "Times used" by useragent 
-| table "Agents used", "Times used"
+index=main sourcetype=access_combined_wcookie
+| stats count as "Times used" by useragent
+| sort -"Times used"
+| rename useragent as "Browser Agent"
+| table "Browser Agent", "Times used"
 ```
 
 ---

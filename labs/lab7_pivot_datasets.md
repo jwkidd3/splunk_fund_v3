@@ -400,7 +400,7 @@ To clean up after this lab:
 
 ## Next Steps
 
-- Proceed to Lab 8: Scheduling Reports and Alerts
+- Proceed to Lab 8: Creating and Using Lookups
 - Explore data model creation and acceleration
 - Learn about Pivot table calculations and formatting
 

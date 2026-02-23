@@ -322,7 +322,9 @@ index=main sourcetype=db_audit Duration>1000
 ```spl
 index=main sourcetype=db_audit
 | stats count by Type
-| eval percent=round(count*100/sum(count),2)
+| eventstats sum(count) as total
+| eval percent=round(count*100/total,2)
+| fields - total
 ```
 
 ### Challenge 3: Executive Dashboard
@@ -407,7 +409,7 @@ This lab creates persistent objects. To clean up:
 
 ## Next Steps
 
-- Proceed to Lab 7: Advanced Searching and Field Extraction
+- Proceed to Lab 7: Pivot Tables and Datasets
 - Explore dashboard drilldown and form inputs
 - Learn about scheduled reports and alerts
 

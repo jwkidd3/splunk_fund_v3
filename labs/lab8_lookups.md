@@ -82,26 +82,23 @@ The lab includes a products.csv file in the course data folder with product info
 The `products.csv` file is already provided in your course data folder with the following content:
 
 ```csv
-productId,product_name,price,categoryId
-A,STRATEGY,24.99,STRATEGY
-B,STRATEGY,39.99,STRATEGY
-C,STRATEGY,24.99,STRATEGY
-D,SHOOTER,24.99,SHOOTER
-E,TEE,9.99,TEE
-F,STRATEGY,4.99,STRATEGY
-BS-AG-G09,Benign Space Debris,24.99,DB-SG-G01
-CU-PG-G06,Curling 2014,39.99,DC-SG-G02
-DB-SG-G01,Dream Crusher,24.99,FS-SG-G03
-DC-SG-G02,Final Sequel,24.99,WC-SH-G04
-FI-AG-G08,Fire Resistance Suit of Provolone,9.99,WC-SH-T02
-FS-SG-G03,Grand Theft Scooter,4.99,PZ-SG-G05
-MB-AG-G07,Mediocre Kingdoms,24.99,MB-AG-G07
-MB-AG-T01,World of Cheese,39.99,MB-AG-T01
-PZ-SG-G05,Puppies vs. Zombies,24.99,PZ-SG-G05
-WC-SH-A01,Holy Blade of Gouda,9.99,WC-SH-A01
-WC-SH-A02,Orc Jogging Suit,4.99,WC-SH-A02
-WC-SH-G04,World of Cheese Tee,24.99,WC-SH-G04
-WC-SH-T02,Cheese Cruiser,39.99,WC-SH-T02
+productId,product_name,categoryId,price,Code
+DB-SG-G01,Mediocre Kingdoms,STRATEGY,24.99,A
+DC-SG-G02,Dream Crusher,STRATEGY,39.99,B
+FS-SG-G03,Final Sequel,STRATEGY,24.99,C
+WC-SH-G04,World of Cheese,SHOOTER,24.99,D
+WC-SH-T02,World of Cheese Tee,TEE,9.99,E
+PZ-SG-G05,Puppies vs. Zombies,STRATEGY,4.99,F
+CU-PG-G06,Curling 2014,SPORTS,19.99,G
+MB-AG-G07,Manganiello Bros.,ARCADE,39.99,H
+MB-AG-T01,Manganiello Bros. Tee,TEE,9.99,I
+FI-AG-G08,Orvil the Wolverine,ARCADE,39.99,J
+BS-AG-G09,Benign Space Debris,ARCADE,24.99,K
+SC-MG-G10,SIM Cubicle,SIMULATION,19.99,L
+WC-SH-A01,Holy Blade of Gouda,ACCESSORIES,5.99,M
+WC-SH-A02,Fire Resistance Suit of Provolone,ACCESSORIES,3.99,N
+GT-SC-G01,Grand Theft Scooter,SHOOTER,24.99,O
+WSC-MG-G10,SIM Cubicle Tee,TEE,9.99,P
 ```
 
 ### Task 1.2: Upload Lookup File
@@ -493,10 +490,10 @@ To clean up after this lab:
 - Revenue calculation field: Price
 
 ### Product List
-- Dream Crusher: $24.99
+- Dream Crusher: $39.99
 - Benign Space Debris: $24.99
-- Curling 2014: $39.99
+- Curling 2014: $19.99
 - Final Sequel: $24.99
-- Fire Resistance Suit of Provolone: $9.99
+- Fire Resistance Suit of Provolone: $3.99
 
 </details>
