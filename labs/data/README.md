@@ -66,7 +66,7 @@ Tue Sep 29 2026 00:18:55 www1 sshd[38627]: Failed password for invalid user mysq
 ```
 
 **Key Learning Points:**
-- 37,504 events contain "port 22" for the Lab 2 exercises
+- 41,915 events match the phrase "port 22" for the Lab 2 exercises (verified in Splunk)
 - Realistic SSH brute force attack patterns
 - Mix of failed/successful authentication events
 - Various attack usernames and IP addresses
