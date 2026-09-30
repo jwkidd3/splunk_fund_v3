@@ -52,10 +52,16 @@ If data is missing, return to Lab 1 to load the sample data.
 
 For all exercises in this lab:
 1. Navigate to **Search & Reporting**
-2. Set time range to **All time**
+2. Set time range to **Last 30 days**
 3. Ensure you're searching in the `main` index
 
-> **Note**: Searching "All time" is not a production best practice but necessary for our limited dataset.
+> **Data window**: The course dataset covers roughly **26 days** ending at the moment
+> `labs/data/generate_course_data.py` was last run — deliberately sized to sit inside
+> Splunk's **Last 30 days** preset. Set the time picker to **Last 30 days** for every
+> exercise unless a step says otherwise.
+>
+> Regenerate the data within **4 days** of delivering the class; past that the preset
+> starts clipping the oldest events and the answer-key counts drift.
 
 ## Key Concepts
 
@@ -75,9 +81,9 @@ Throughout this lab, you'll work with these key fields:
 
 | Sourcetype | Key Fields |
 |------------|------------|
-| access_combined_wcookie | action, bytes, categoryId, clientip, itemId, JSESSIONID, productId, referer, status, file |
+| access_combined_wcookie | action, bytes, categoryId, clientip, JSESSIONID, productId, referer, status, file |
 | db_audit | Command, Duration, Type |
-| linux_secure | COMMAND, PWD, pid, process |
+| linux_secure | raw syslog text — extract `user` / `src_ip` with `rex` (see Lab 6) |
 
 ---
 
@@ -294,14 +300,20 @@ index=main sourcetype=db_audit
 
 ```spl
 index=main sourcetype=db_audit 
-| stats avg(Duration) as "time to complete" by Command
+| rex field=Command "^(?<sql_verb>\w+)" 
+| stats avg(Duration) as "time to complete" by sql_verb
 ```
+
+> **Note**: Each `Command` value contains its own literal IDs, so grouping by
+> `Command` yields tens of thousands of single-event rows. Extract the SQL verb
+> first to get a meaningful breakdown.
 
 ### Task 6.3: Find Slowest Queries
 
 ```spl
 index=main sourcetype=db_audit 
-| stats avg(Duration) as "time to complete" by Command 
+| rex field=Command "^(?<sql_verb>\w+)" 
+| stats avg(Duration) as "time to complete" by sql_verb 
 | sort -"time to complete"
 ```
 
@@ -404,7 +416,7 @@ index=main sourcetype=access_combined_wcookie
 
 | Issue | Solution |
 |-------|----------|
-| No results returned | Check time range is set to "All time" |
+| No results returned | Check time range is set to "Last 30 days" |
 | Fields not found | Verify field names are case-sensitive |
 | Stats showing 0 | Ensure status=200 filter is included |
 | Percentages showing when not wanted | Add `showperc=false` to top command |
@@ -475,23 +487,29 @@ No cleanup required for this lab as we're only running searches, not creating an
 <summary>Click to reveal answers</summary>
 
 ### Exercise 1
-- Best-selling product: WC-SH-G04
+- Best-selling product: WSC-MG-G10 (SIM Cubicle Tee), 204 units
 
 ### Exercise 2
-- Rare files may include: api, account, userlist, passwords.pdf
+- Rarest files with status=200: oldlink (1,710), success.do (3,054), cart.do (14,092)
+- Note: `logo.ico` never appears here — those requests always return 404.
+- Answer to "any suspicious file names?": no. This dataset contains only ordinary
+  application paths; the exercise teaches the `rare` workflow you would use to
+  spot an anomaly in production data.
 
 ### Exercise 3
-- Cart additions: 29328
-- Purchases: 16139
-- Conversion rate: ~55%
+- cart.do events (status=200): 14,092
+- success.do events (status=200): 3,054
 
 ### Exercise 4
-- Top IP: 87.194.216.51
+- IP with most sessions: 92.46.53.223 (3,309 distinct JSESSIONIDs)
+- Runners-up: 212.58.253.71 (2,830), 91.214.92.22 (2,390)
 
 ### Exercise 5
-- Least bandwidth file: api
+- File using least bandwidth: oldlink (~3.6 MB)
+- Heaviest: product.screen (~111.0 MB)
 
 ### Exercise 6
-- Pattern: SELECT queries with JOIN operations are slowest
+- Average duration by command type: UPDATE 54.8, INSERT 54.6, SELECT 27.4, DELETE 17.5
+- Pattern: write operations take roughly twice as long as reads
 
 </details>

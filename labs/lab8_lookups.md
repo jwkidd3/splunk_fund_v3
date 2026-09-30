@@ -25,6 +25,14 @@ By the end of this lab, you will be able to:
 - Access to Sales Dashboard from previous labs
 - Basic knowledge of field mapping concepts
 
+> **Data window**: The course dataset covers roughly **26 days** ending at the moment
+> `labs/data/generate_course_data.py` was last run — deliberately sized to sit inside
+> Splunk's **Last 30 days** preset. Set the time picker to **Last 30 days** for every
+> exercise unless a step says otherwise.
+>
+> Regenerate the data within **4 days** of delivering the class; past that the preset
+> starts clipping the oldest events and the answer-key counts drift.
+
 ## Lab Environment Setup
 
 ### Step 1: Verify Sample Data
@@ -450,7 +458,7 @@ To clean up after this lab:
 | `inputlookup` | View lookup contents | `\| inputlookup products_lookup` |
 | `lookup` | Apply lookup to results | `\| lookup products_lookup productId OUTPUT product_name` |
 | `outputlookup` | Write results to lookup | `\| outputlookup new_products.csv` |
-| `lookupfiles` | List available lookups | `\| rest /services/data/lookup-table-files` |
+| `rest` | List available lookup files | `\| rest /services/data/lookup-table-files` |
 
 ### Lookup Command Syntax
 
@@ -465,9 +473,9 @@ To clean up after this lab:
 
 | Pattern | Use Case | Example |
 |---------|----------|---------|
-| Simple enrichment | Add product names | `lookup products productId OUTPUT name` |
-| Multiple outputs | Add name and price | `lookup products productId OUTPUT name, price` |
-| Field renaming | Custom field names | `lookup products id AS productId OUTPUT name AS ProductName` |
+| Simple enrichment | Add product names | `lookup products_lookup productId OUTPUT product_name` |
+| Multiple outputs | Add name and price | `lookup products_lookup productId OUTPUT product_name, price` |
+| Field renaming | Custom field names | `lookup products_lookup productId OUTPUT product_name AS ProductName` |
 | Update existing | Overwrite fields | `lookup update=true products productId OUTPUT price` |
 
 ---
@@ -486,7 +494,7 @@ To clean up after this lab:
 - Applied to sourcetype: access_combined_wcookie
 
 ### Exercise 5
-- Top revenue product: Dream Crusher
+- Top revenue product: Orvil the Wolverine ($7,998.00)
 - Revenue calculation field: Price
 
 ### Product List

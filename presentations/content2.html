@@ -190,7 +190,7 @@
                         <h3>❌ Hard to Read</h3>
                         <div class="code-scroll">
                             <pre><code>
-index=web sourcetype=access_* status=503 | stats sum(price) as lost_revenue | eval lost_revenue = "$" + tostring(lost_revenue, "commas")
+index=main sourcetype=access_combined_wcookie status=500 | lookup products_lookup productId OUTPUT price | stats sum(price) as lost_revenue | eval lost_revenue = "$" + tostring(round(lost_revenue, 2), "commas")
                             </code></pre>
                         </div>
                     </div>
@@ -198,9 +198,10 @@ index=web sourcetype=access_* status=503 | stats sum(price) as lost_revenue | ev
                         <h3>✅ Well Formatted</h3>
                         <div class="code-scroll">
                             <pre><code>
-index=web sourcetype=access_* status=503 
+index=main sourcetype=access_combined_wcookie status=500 
+| lookup products_lookup productId OUTPUT price 
 | stats sum(price) as lost_revenue 
-| eval lost_revenue = "$" + tostring(lost_revenue, "commas")
+| eval lost_revenue = "$" + tostring(round(lost_revenue, 2), "commas")
                             </code></pre>
                         </div>
                     </div>
@@ -244,17 +245,17 @@ index=web sourcetype=access_* status=503
                     <h3>Basic Usage:</h3>
                     <pre><code>
 # Default: top 10 values with count and percent
-index=security sourcetype=linux_secure (fail* OR invalid)
+index=main sourcetype=linux_secure (fail* OR invalid)
 | top src_ip
 
 # Limit results and remove percentages
-index=main sourcetype=access_combined status=200 file=success.do
+index=main sourcetype=access_combined_wcookie status=200 file=success.do
 | top productId limit=5 showperc=false
 
 # Custom count field name
-index=network sourcetype=cisco_wsa_squid
-| top cs_username x_webcat_code_full limit=3 
-  countfield="Total Viewed" showperc=f
+index=main sourcetype=access_combined_wcookie action=purchase
+| top categoryId productId limit=3 
+  countfield="Total Purchased" showperc=f
                     </code></pre>
                 </div>
             </section>
@@ -269,16 +270,16 @@ index=network sourcetype=cisco_wsa_squid
                     <h3>Security Analysis Example:</h3>
                     <pre><code>
 # Find rarely accessed files (potential security threats)
-index=main sourcetype=access_combined status=200
+index=main sourcetype=access_combined_wcookie status=200
 | rare file
 
 # Break down by time period
-index=main sourcetype=access_combined status=200
+index=main sourcetype=access_combined_wcookie status=200
 | rare file by date_month
 
 # Limit to single rarest value
-index=sales sourcetype=vendor_sales
-| rare product_name showperc=f limit=1
+index=main sourcetype=access_combined_wcookie action=purchase
+| rare productId showperc=f limit=1
                     </code></pre>
                 </div>
                 <p><strong>Use Case:</strong> Identify suspicious file access patterns or unusual behavior</p>
@@ -322,15 +323,15 @@ index=sales sourcetype=vendor_sales
                     <h3>Examples:</h3>
                     <pre><code>
 # Simple count
-index=security sourcetype=linux_secure (invalid OR failed)
+index=main sourcetype=linux_secure (invalid OR failed)
 | stats count
 
 # Count with custom name
-index=security sourcetype=linux_secure (invalid OR failed)
+index=main sourcetype=linux_secure (invalid OR failed)
 | stats count as "Potential Issues"
 
 # Count by field
-index=main sourcetype=access_combined (file=cart.do OR file=success.do) status=200
+index=main sourcetype=access_combined_wcookie (file=cart.do OR file=success.do) status=200
 | stats count as Transactions by file
 | rename file as Function
                     </code></pre>
@@ -347,17 +348,17 @@ index=main sourcetype=access_combined (file=cart.do OR file=success.do) status=2
                     <h3>User Session Analysis:</h3>
                     <pre><code>
 # Count unique sessions
-index=main sourcetype=access_combined
+index=main sourcetype=access_combined_wcookie
 | stats dc(JSESSIONID) as Logins
 
 # Break down by IP address
-index=main sourcetype=access_combined
+index=main sourcetype=access_combined_wcookie
 | stats dc(JSESSIONID) as Logins by clientip
 | sort -Logins
 
 # Multiple metrics
-index=network sourcetype=cisco_wsa_squid
-| stats dc(s_hostname) as "Websites visited:"
+index=main sourcetype=access_combined_wcookie
+| stats dc(referer) as "Referring sites"
                     </code></pre>
                 </div>
             </section>
@@ -372,12 +373,13 @@ index=network sourcetype=cisco_wsa_squid
                     <h3>Bandwidth and Revenue Analysis:</h3>
                     <pre><code>
 # Total bandwidth consumption
-index=main sourcetype=access_combined status=200
+index=main sourcetype=access_combined_wcookie status=200
 | stats sum(bytes) as TotalBytes by file
 | sort file
 
 # Revenue calculation with multiple functions
-index=sales sourcetype=vendor_sales
+index=main sourcetype=access_combined_wcookie action=purchase
+| lookup products_lookup productId OUTPUT product_name price
 | stats count(price) as "Units Sold",
         sum(price) as "Total Sales" by product_name
 | sort -"Total Sales"
@@ -400,12 +402,13 @@ index=main sourcetype=db_audit
 
 # Performance by command type
 index=main sourcetype=db_audit
-| stats avg(Duration) as "time to complete" by Command
+| rex field=Command "^(?&lt;sql_verb&gt;\w+)"
+| stats avg(Duration) as "time to complete" by sql_verb
 | sort -"time to complete"
 
 # Network performance
-index=network sourcetype=cisco_wsa_squid
-| stats avg(sc_bytes) as "Average Bytes" by usage
+index=main sourcetype=access_combined_wcookie
+| stats avg(bytes) as "Average Bytes" by file
                     </code></pre>
                 </div>
                 <p><strong>Note:</strong> Events without the field or with invalid values are excluded</p>
@@ -423,11 +426,11 @@ index=network sourcetype=cisco_wsa_squid
                         <div class="code-scroll">
                             <pre><code>
 # Shows all values (including duplicates)
-index=network sourcetype=cisco_wsa_squid
-| stats list(s_hostname) as "Websites visited:" by cs_username
+index=main sourcetype=access_combined_wcookie
+| stats list(file) as "Pages visited" by clientip
 
 # Browser usage with counts
-index=main sourcetype=access_combined
+index=main sourcetype=access_combined_wcookie
 | stats list(useragent) as "All Agents",
         count as "Times used" by useragent
                             </code></pre>
@@ -438,12 +441,13 @@ index=main sourcetype=access_combined
                         <div class="code-scroll">
                             <pre><code>
 # Shows unique values only
-index=security sourcetype=linux_secure fail*
+index=main sourcetype=linux_secure "Failed password"
+| rex "for (?:invalid user )?(?&lt;user&gt;\S+) from (?&lt;src_ip&gt;\d+\.\d+\.\d+\.\d+)"
 | stats values(user) as "User Names",
         count(user) as Attempts by src_ip
 
 # Clean browser list
-index=main sourcetype=access_combined
+index=main sourcetype=access_combined_wcookie
 | stats values(useragent) as "Agents used"
                             </code></pre>
                         </div>
@@ -466,7 +470,8 @@ index=main sourcetype=access_combined
                 <div class="code-scroll">
                     <h3>Professional Revenue Report:</h3>
                     <pre><code>
-index=sales sourcetype=vendor_sales
+index=main sourcetype=access_combined_wcookie action=purchase
+| lookup products_lookup productId OUTPUT product_name price
 | stats count(price) as "Units Sold",
         sum(price) as "Total Sales" by product_name
 | sort -"Total Sales"
@@ -712,7 +717,7 @@ index=sales sourcetype=vendor_sales
                     <h3>Steps to Create Instant Pivot:</h3>
                     <pre><code>
 1. Execute a search (search criteria only, no commands)
-   Example: index=main sourcetype=access_combined action=purchase
+   Example: index=main sourcetype=access_combined_wcookie action=purchase
 
 2. Click the Statistics or Visualization tab
 
@@ -807,7 +812,7 @@ WC-SH-T02,World of Cheese Tee,TEE,9.99,E
                         <div class="code-scroll">
                             <pre><code>
 # Review lookup data
-| inputlookup products.csv
+| inputlookup products_lookup
 
 # Validate lookup definition
 | inputlookup products_lookup
@@ -820,7 +825,7 @@ WC-SH-T02,World of Cheese Tee,TEE,9.99,E
                         <div class="code-scroll">
                             <pre><code>
 # Manual lookup application
-index=main sourcetype=access_combined
+index=main sourcetype=access_combined_wcookie
 | lookup products_lookup 
     productId as productId 
     OUTPUT product_name as ProductName
@@ -852,7 +857,7 @@ index=main sourcetype=access_combined
    - Output fields: product_name = ProductName, price = Price
 
 3. Use enriched fields in searches:
-index=main sourcetype=access_combined file=success.do status=200
+index=main sourcetype=access_combined_wcookie file=success.do status=200
 | stats sum(Price) as Revenue by ProductName
 | sort -Revenue
                     </code></pre>
@@ -1343,16 +1348,16 @@ Format Options:
                         <ul>
                             <li><strong>Splunkbase:</strong> https://splunkbase.splunk.com/</li>
                             <li><strong>Documentation:</strong> https://docs.splunk.com/</li>
-                            <li><strong>Splunk Answers:</strong> http://answers.splunk.com/</li>
+                            <li><strong>Splunk Community:</strong> https://community.splunk.com/</li>
                             <li><strong>Training:</strong> https://education.splunk.com/</li>
                         </ul>
                     </div>
                     <div>
                         <h3>Community</h3>
                         <ul>
-                            <li><strong>User Groups:</strong> http://usergroups.splunk.com/</li>
-                            <li><strong>Blogs:</strong> http://blogs.splunk.com/</li>
-                            <li><strong>Wiki:</strong> http://wiki.splunk.com/</li>
+                            <li><strong>User Groups:</strong> https://usergroups.splunk.com/</li>
+                            <li><strong>Blogs:</strong> https://www.splunk.com/en_us/blog</li>
+                            <li><strong>Developer Portal:</strong> https://dev.splunk.com/</li>
                             <li><strong>Conferences:</strong> .conf and regional events</li>
                         </ul>
                     </div>

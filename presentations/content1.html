@@ -356,7 +356,7 @@ search_terms | command1 | command2 | command3
 Examples:
 error | head 10
 status=404 | stats count by host
-index=web | where bytes > 1000 | table _time, host, bytes
+index=main | where bytes > 1000 | table _time, host, bytes
                     </code></pre>
                 </div>
             </section>
@@ -493,7 +493,7 @@ error | where index="main"
 index=main error | stats count
 
 # Multiple indexes if needed
-(index=web OR index=app) error
+(index=main OR index=_internal) error
                             </code></pre>
                         </div>
                     </div>
@@ -516,7 +516,7 @@ index=main error | stats count
 index=main | where status="404"
 
 # Missing relevant terms
-index=web error
+index=main error
                             </code></pre>
                         </div>
                     </div>
@@ -528,7 +528,7 @@ index=web error
 index=main status=404 method=GET
 
 # Include context
-index=web error failed authentication
+index=main error failed authentication
                             </code></pre>
                         </div>
                     </div>
@@ -548,10 +548,10 @@ index=web error failed authentication
                         <div class="code-scroll">
                             <pre><code>
 # Excluding many values
-index=main NOT (status=200 OR status=201)
+index=main NOT (status=200 OR status=404)
 
 # Using NOT extensively
-index=web NOT success NOT debug
+index=main NOT success NOT debug
                             </code></pre>
                         </div>
                     </div>
@@ -563,7 +563,7 @@ index=web NOT success NOT debug
 index=main (status=404 OR status=500)
 
 # Positive matching
-index=web error failed exception
+index=main error failed exception
                             </code></pre>
                         </div>
                     </div>
@@ -590,9 +590,9 @@ index=main
 | where status=404
 
 # Search late in pipeline
-index=web 
-| eval response_time=duration/1000
-| search response_time > 5
+index=main 
+| eval kb=bytes/1024
+| search kb > 5
                             </code></pre>
                         </div>
                     </div>
@@ -605,8 +605,8 @@ index=main status=404
 | stats count by host
 
 # Filter before transformation
-index=web duration > 5000
-| eval response_time=duration/1000
+index=main bytes > 5000
+| eval kb=bytes/1024
                             </code></pre>
                         </div>
                     </div>
@@ -629,7 +629,7 @@ index=web duration > 5000
 index=main "*error"
 
 # Too broad matching
-index=web "*"
+index=main "*"
 
 # Unnecessary wildcards
 index=main "user*" (when you mean "user")
@@ -644,7 +644,7 @@ index=main "user*" (when you mean "user")
 index=main "error*"
 
 # Specific patterns
-index=web "user_*_login"
+index=main sourcetype=linux_secure "invalid user *"
 
 # Exact matches when possible
 index=main "error" (instead of "error*")
@@ -845,7 +845,7 @@ earliest=-1mon@mon latest=@mon   (Previous month, exactly)
                             <pre><code>
 # Wrong field name case
 Status=200    (should be status=200)
-HOST=web01    (should be host=web01)
+HOST=web_server    (should be host=web_server)
 Clientip=*    (should be clientip=*)
 
 # These will NOT match
@@ -858,8 +858,8 @@ Clientip=*    (should be clientip=*)
                             <pre><code>
 # Correct field name case
 status=200
-host=web01
-clientip=192.168.1.1
+host=web_server
+clientip=192.168.1.100
 
 # Field values (usually case-insensitive)
 method=GET or method=get (both work)

@@ -44,10 +44,16 @@ Required sourcetypes:
 
 For all exercises:
 1. Navigate to **Search & Reporting** app
-2. Set time range to **All time**
+2. Set time range to **Last 30 days**
 3. Use the `main` index
 
-> **Note**: Searching "All time" is not a production best practice but necessary for our limited dataset.
+> **Data window**: The course dataset covers roughly **26 days** ending at the moment
+> `labs/data/generate_course_data.py` was last run — deliberately sized to sit inside
+> Splunk's **Last 30 days** preset. Set the time picker to **Last 30 days** for every
+> exercise unless a step says otherwise.
+>
+> Regenerate the data within **4 days** of delivering the class; past that the preset
+> starts clipping the oldest events and the answer-key counts drift.
 
 ## Key Concepts
 
@@ -284,8 +290,9 @@ Create a comprehensive security dashboard with:
 1. **Failed Login Attempts Panel**:
 ```spl
 index=main sourcetype=linux_secure "Failed password"
-| stats count by process
-| sort -count
+| rex "for (?:invalid user )?(?<user>\S+) from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count as Attempts by src_ip, user
+| sort -Attempts
 ```
 
 2. **404 Error Tracking**:
@@ -300,7 +307,7 @@ index=main sourcetype=access_combined_wcookie
 | eval suspicious=case(
     status=403, 3,
     status=404, 1,
-    file="passwords.pdf", 5,
+    file="oldlink", 2,
     1=1, 0)
 | stats sum(suspicious) as "Risk Score" by clientip
 | where 'Risk Score' > 10
@@ -453,15 +460,17 @@ Data Type → Recommended Visualization
 <summary>Click to reveal answers</summary>
 
 ### Exercise 1
-- IP with most attempts: 87.194.216.51
-- Total attempts: 11
+- IP with most forbidden (403) attempts: 92.46.53.223 (350 attempts)
+- Total forbidden events: 1,936
 
 ### Exercise 2
-- Total units sold: 16,139
-- Top selling product: WC-SH-G04
+- Total units sold: 3,054
+- Top selling product: WSC-MG-G10 (SIM Cubicle Tee)
 
 ### Additional Metrics
-- Conversion rate: ~55% (16,139 purchases / 29,328 cart additions)
-- Unique sessions: 11,455
+- Cart additions: 11,405
+- Purchases: 3,214
+- Conversion rate: ~28.2% (3,214 purchases / 11,405 cart additions)
+- Unique sessions (distinct JSESSIONID): 18,603
 
 </details>

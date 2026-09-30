@@ -24,6 +24,14 @@ By the end of this lab, you will be able to:
 - Familiarity with creating dashboards
 - Basic knowledge of data visualization concepts
 
+> **Data window**: The course dataset covers roughly **26 days** ending at the moment
+> `labs/data/generate_course_data.py` was last run — deliberately sized to sit inside
+> Splunk's **Last 30 days** preset. Set the time picker to **Last 30 days** for every
+> exercise unless a step says otherwise.
+>
+> Regenerate the data within **4 days** of delivering the class; past that the preset
+> starts clipping the oldest events and the answer-key counts drift.
+
 ## Lab Environment Setup
 
 ### Step 1: Verify Sample Data
@@ -63,7 +71,7 @@ Ensure the Sales Dashboard from Lab 6 exists:
 |-----------|---------|---------|
 | **Filters** | Limit data to specific criteria | file=cart.do |
 | **Split Rows** | Group data by field values (Y-axis) | productId |
-| **Split Columns** | Create data series (X-axis) | referrer_domain |
+| **Split Columns** | Create data series (X-axis) | referer_domain |
 | **Values** | Metrics to calculate | Count, Sum, Average |
 
 ### Datasets vs Data Models
@@ -94,7 +102,7 @@ Start with a basic search:
 index=main sourcetype=access_combined_wcookie
 ```
 
-1. Run the search for **All time**
+1. Run the search for **Last 30 days**
 2. Click the **Visualization** tab
 3. Observe three icons:
    - **Pivot** - Build tables and visualizations
@@ -138,7 +146,7 @@ Under **Split Rows**:
 
 Under **Split Columns**:
 1. Click **+** to add split columns
-2. Select **referrer_domain** field
+2. Select **referer_domain** field
 3. Keep default settings
 4. Click **Add To Table**
 
@@ -150,7 +158,7 @@ Add another filter to exclude internal traffic:
 
 Under **Filters**:
 1. Click **+** to add another filter
-2. Select **referrer_domain** from Fields list
+2. Select **referer_domain** from Fields list
 3. Configure:
    - **Filter Type**: Match
    - **Match**: is not → `http://www.buttercupgames.com`
@@ -431,7 +439,7 @@ To clean up after this lab:
 | Analysis Type | Filters | Split Rows | Split Columns |
 |--------------|---------|------------|---------------|
 | Product Sales | file=success.do | productId | _time |
-| Traffic Sources | status=200 | referrer_domain | date_hour |
+| Traffic Sources | status=200 | referer_domain | date_hour |
 | Error Analysis | status>=400 | status | file |
 | User Behavior | - | action | clientip |
 
@@ -443,15 +451,16 @@ To clean up after this lab:
 <summary>Click to reveal answers</summary>
 
 ### Exercise 1
-- Most cart additions come from: google.com, yahoo.com, bing.com
-- Top products added to cart: BS-AG-G09, CU-PG-G06, DB-SG-G01
+- Most cart additions come from: buttercupgames.com (3,432), google.com (2,941),
+  facebook.com (1,410)
+- Top products added to cart: CU-PG-G06, PZ-SG-G05, WC-SH-A02
 
 ### Exercise 2
 - Dataset created: web_app_ds
 - Panel added: Sales By Referral Domain
 
 ### Dataset Fields
-- Key fields: file, productId, referrer_domain, status, clientip
+- Key fields: file, productId, referer_domain, status, clientip
 - Time field: _time
 
 </details>

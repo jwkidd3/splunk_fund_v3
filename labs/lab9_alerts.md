@@ -27,6 +27,10 @@ By the end of this lab, you will be able to:
 - Understanding of Splunk search commands
 - Familiarity with authentication concepts
 
+> **Data window**: This lab watches the live `_audit` index, so it uses short,
+> recent ranges (**Last 15 minutes**) rather than the window the uploaded course
+> data covers. You generate the events yourself as you go.
+
 ## Lab Environment Setup
 
 ### Step 1: Verify License Type

@@ -24,10 +24,10 @@ class CourseValidator:
         self.errors = []
         self.warnings = []
         self.lab_order = [
-            "Lab1_Data_Loading.md",
-            "Lab2_Basic_Searching.md",
-            "Lab3_Using_Fields_in_Searches.md",
-            "Lab4_Basic_Commands.md",
+            "lab1_data_loading.md",
+            "lab2_basic_searching.md",
+            "lab3_using_fields_in_searches.md",
+            "lab4_basic_commands.md",
             "lab5_transforming_commands.md",
             "lab6_reports_dashboards.md",
             "lab7_pivot_datasets.md",
@@ -167,10 +167,10 @@ class CourseValidator:
 
         # Define lab-to-concept mappings
         lab_concepts = {
-            "Lab1_Data_Loading.md": ["data ingestion", "source type", "index"],
-            "Lab2_Basic_Searching.md": ["search", "timeline", "Boolean", "search history", "jobs"],
-            "Lab3_Using_Fields_in_Searches.md": ["fields", "sidebar"],
-            "Lab4_Basic_Commands.md": ["commands", "table", "sort", "dedup"],
+            "lab1_data_loading.md": ["data ingestion", "source type", "index"],
+            "lab2_basic_searching.md": ["search", "timeline", "Boolean", "search history", "jobs"],
+            "lab3_using_fields_in_searches.md": ["fields", "sidebar"],
+            "lab4_basic_commands.md": ["commands", "table", "sort", "dedup"],
             "lab5_transforming_commands.md": ["stats", "chart", "transforming"],
             "lab6_reports_dashboards.md": ["reports", "dashboards", "visualizations"],
             "lab7_pivot_datasets.md": ["pivot", "datasets"],
