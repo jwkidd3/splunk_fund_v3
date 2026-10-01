@@ -1,0 +1,125 @@
+@page {
+  size: Letter;
+  margin: 18mm 16mm 20mm 16mm;
+}
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  color: #1a1a1a;
+  max-width: none;
+  margin: 0;
+}
+
+/* ---- headings ---- */
+h1 {
+  font-size: 21pt;
+  color: #0b2e4f;
+  border-bottom: 3px solid #e01a3c;
+  padding-bottom: 6px;
+  margin: 0 0 18px 0;
+}
+h2 {
+  font-size: 14pt;
+  color: #0b2e4f;
+  border-bottom: 1px solid #c9d4de;
+  padding-bottom: 3px;
+  margin: 22px 0 10px 0;
+  break-after: avoid;
+}
+h3 { font-size: 11.5pt; color: #234; margin: 16px 0 6px 0; break-after: avoid; }
+h4 { font-size: 10.5pt; color: #456; margin: 12px 0 4px 0; break-after: avoid; }
+
+/* keep a heading with the block that follows it */
+h2, h3, h4 { page-break-after: avoid; }
+
+/* ---- code ---- */
+code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9pt;
+  background: #f0f3f6;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #b3003c;
+}
+pre {
+  background: #f7f9fb;
+  border: 1px solid #d6dee6;
+  border-left: 4px solid #e01a3c;
+  border-radius: 4px;
+  padding: 9px 11px;
+  margin: 9px 0;
+  overflow: visible;
+  white-space: pre-wrap;        /* wrap long SPL instead of clipping */
+  word-break: break-word;
+  break-inside: avoid;
+}
+pre code {
+  background: none;
+  padding: 0;
+  color: #16304a;
+  font-size: 8.8pt;
+  line-height: 1.42;
+}
+
+/* ---- tables ---- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+th {
+  background: #0b2e4f;
+  color: #fff;
+  text-align: left;
+  padding: 5px 8px;
+  font-weight: 600;
+}
+td { border: 1px solid #d6dee6; padding: 4px 8px; vertical-align: top; }
+tr:nth-child(even) td { background: #f7f9fb; }
+
+/* ---- blockquote / notes ---- */
+blockquote {
+  background: #fff8e6;
+  border-left: 4px solid #f0a500;
+  margin: 10px 0;
+  padding: 7px 12px;
+  color: #4a3a10;
+  break-inside: avoid;
+}
+blockquote p { margin: 3px 0; }
+
+/* ---- lists & checkboxes ---- */
+ul, ol { margin: 6px 0; padding-left: 22px; }
+li { margin: 2px 0; }
+
+/* ---- answer key ---- */
+details {
+  background: #eef6ee;
+  border: 1px solid #a9cba9;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 12px 0;
+  break-inside: avoid;
+}
+details > summary {
+  font-weight: 700;
+  color: #1d5c1d;
+  list-style: none;
+  margin-bottom: 6px;
+}
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "🔑 "; }
+
+hr { border: none; border-top: 1px solid #d6dee6; margin: 18px 0; }
+
+/* each top-level lab section starts cleanly */
+h2.pagebreak { page-break-before: always; }
+
+/* pandoc's standalone title block repeats the filename above the real H1 */
+#title-block-header { display: none; }
