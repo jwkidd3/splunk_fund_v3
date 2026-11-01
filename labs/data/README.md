@@ -28,7 +28,7 @@ This directory contains synthetic data files for the Splunk Fundamentals course 
 ```
 91.214.92.22 - - [30/Aug/2026:17:57:18] "POST /success.do?action=purchase&categoryId=STRATEGY&productId=FS-SG-G03&JSESSIONID=SD6SL42FF11ADFF9850 HTTP 1.1" 200 3270 "http://www.google.com" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" 354
 ```
-> Timestamps shift to the most recent 30 days every time the generator runs; the
+> Timestamps shift to the most recent 26 days every time the generator runs; the
 > event *values* are fixed by the generator's seed.
 
 **Conversion Funnel**
@@ -37,13 +37,13 @@ Events are emitted as per-session customer journeys, so the funnel narrows reali
 
 | Stage | Events |
 |-------|--------|
-| Product views (`/product.screen`) | 55,880 |
-| Cart additions (`action=addtocart`) | 11,339 |
-| Cart views / removals | 2,532 / 821 |
-| Purchases (`action=purchase`) | 3,227 |
+| Product views (`/product.screen`) | 55,841 |
+| Cart additions (`action=addtocart`) | 11,405 |
+| Cart views / removals | 2,615 / 836 |
+| Purchases (`action=purchase`) | 3,214 |
 
-Cart-to-purchase conversion is **~28.5%**. Each `JSESSIONID` belongs to exactly one
-client IP (18,684 distinct sessions), so `dc(JSESSIONID) by clientip` ranks meaningfully.
+Cart-to-purchase conversion is **~28.2%**. Each `JSESSIONID` belongs to exactly one
+client IP (18,603 distinct sessions), so `dc(JSESSIONID) by clientip` ranks meaningfully.
 The `categoryId` in every purchase URL matches that product's category in `products.csv`.
 
 ### Linux Security Logs (linux_s_30DAY.log)
@@ -66,7 +66,7 @@ Tue Sep 29 2026 00:18:55 www1 sshd[38627]: Failed password for invalid user mysq
 ```
 
 **Key Learning Points:**
-- 41,915 events match the phrase "port 22" for the Lab 2 exercises (verified in Splunk)
+- 42,034 events match the phrase "port 22" for the Lab 2 exercises (verified in Splunk)
 - Realistic SSH brute force attack patterns
 - Mix of failed/successful authentication events
 - Various attack usernames and IP addresses
@@ -124,7 +124,7 @@ If you need to regenerate the data files (e.g., to change patterns or increase v
 
 3. **Command-line options:**
    ```bash
-   python3 generate_course_data.py --days 30 --seed 20240101
+   python3 generate_course_data.py --days 26 --seed 20240101
    ```
    - `--days N` — size of the rolling window (default 26)
    - `--seed N` — random seed (default 20240101)
