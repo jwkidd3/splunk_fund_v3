@@ -353,10 +353,23 @@ each filter you included.
 <summary>Click to reveal answers</summary>
 
 ### Exercise 1
-- Last 30 days: **131,645** events
-- Last 24 hours: **995** events
-- All time: **131,645** events — same as Last 30 days, because the dataset spans
-  about 26 days
+- Last 30 days: **131,645** events — the whole dataset
+- All time: **131,645** events — identical, because the dataset spans about 26
+  days and so sits entirely inside the 30-day window. Same answer, more work:
+  Splunk had to check every bucket to establish it
+- Last 24 hours: **a few thousand**, roughly one day out of twenty-six. This
+  figure is deliberately not pinned down. The dataset's timestamps are anchored
+  to the moment `generate_course_data.py` last ran, so a relative window like
+  "Last 24 hours" returns a different count depending on how long ago that was —
+  and **zero** if the data was regenerated more than a day ago, because the
+  newest event then falls outside the window entirely.
+
+  That sensitivity is the exercise. A relative time range is evaluated against
+  the clock, not against the data, which is exactly why the time picker is the
+  first thing to check when a search returns nothing.
+
+  > **Instructor note**: regenerate the data the evening before or the morning
+  > of the class if you want this task to return a non-zero count.
 
 ### Exercise 3
 - Task 3.1 (`status!=200`): **24,402**

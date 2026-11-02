@@ -134,6 +134,12 @@ If you need to regenerate the data files (e.g., to change patterns or increase v
    > only the timestamps roll forward. Change the seed only if you intend to
    > recompute every answer key.
 
+   > **Lab 5's "Last 24 hours" task** needs the data to be less than a day old to
+   > return anything, since a relative window is measured against the clock. If
+   > you regenerate the evening before class it behaves as written; if the data
+   > is older than that, the task correctly returns zero and the lab's answer key
+   > explains why.
+
    > **Why 26 days and not 30?** The labs tell students to search with Splunk's
    > **Last 30 days** preset. If the data also spanned a full 30 days, that preset
    > would begin clipping the oldest events as soon as the clock passed generation

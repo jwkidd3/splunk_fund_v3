@@ -439,6 +439,9 @@ After completing the lab:
 
 ## Next Steps
 
+- Proceed to Lab 11: Capstone — End-to-End Investigation, which combines the
+  searching, statistics, lookups, dashboards and alerting from Labs 2 through 10
+  into a single investigation
 - Explore advanced alert actions (scripts, webhooks)
 - Learn about alert clustering and correlation
 - Study integration with SOAR platforms
