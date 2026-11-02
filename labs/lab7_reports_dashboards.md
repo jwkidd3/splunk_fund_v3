@@ -1,4 +1,4 @@
-# Lab 6: Creating Reports and Dashboards in Splunk
+# Lab 7: Creating Reports and Dashboards in Splunk
 
 ## Lab Overview
 
@@ -416,7 +416,7 @@ This lab creates persistent objects. To clean up:
 
 ## Next Steps
 
-- Proceed to Lab 7: Pivot Tables and Datasets
+- Proceed to Lab 8: Pivot Tables and Datasets
 - Explore dashboard drilldown and form inputs
 - Learn about scheduled reports and alerts
 

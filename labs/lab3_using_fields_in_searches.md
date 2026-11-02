@@ -241,6 +241,64 @@ This lab focuses on web application data:
 - Correlate issues across time periods
 - Build targeted investigations
 
+## Challenge Exercises
+
+### Challenge 1: Survey Field Cardinality
+
+Before filtering on a field, it helps to know how many values it holds. Build a
+single search reporting the distinct count for the main web fields:
+
+```spl
+index=main sourcetype=access_combined_wcookie
+| stats dc(clientip) as ips, dc(file) as files, dc(status) as statuses,
+        dc(productId) as products, dc(categoryId) as categories
+```
+
+Which of these would make a sensible `by` clause, and which would produce an
+unmanageable number of rows?
+
+### Challenge 2: Filter on Several Fields
+
+Combine three field filters in one search to isolate successful purchases of a
+single product:
+
+```spl
+index=main sourcetype=access_combined_wcookie status=200 file=success.do productId=FI-AG-G08
+| stats count
+```
+
+Swap the product ID for others and compare.
+
+### Challenge 3: Fields Are Not Universal
+
+Not every field appears on every event. Determine how many web events carry a
+`productId` and how many do not:
+
+```spl
+index=main sourcetype=access_combined_wcookie
+| stats count(productId) as with_product, count as total
+| eval without_product=total-with_product
+```
+
+Explain why the gap exists, using what you know about the URLs in the log.
+
+### Challenge 4: Compare Fields Across Source Types
+
+The fields sidebar differs by source type. Check which fields each one exposes:
+
+```spl
+index=main sourcetype=db_audit | head 1 | table Type, Command, Duration
+```
+
+```spl
+index=main sourcetype=linux_secure | head 1 | table _raw
+```
+
+Why does the Linux secure log expose so few fields compared with the other two,
+and what would you have to do to get fields from it?
+
+---
+
 ## Troubleshooting
 
 ### Common Issues

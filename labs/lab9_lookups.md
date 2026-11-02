@@ -1,4 +1,4 @@
-# Lab 8: Creating and Using Lookups in Splunk
+# Lab 9: Creating and Using Lookups in Splunk
 
 ## Lab Overview
 

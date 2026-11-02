@@ -28,11 +28,13 @@ class CourseValidator:
             "lab2_basic_searching.md",
             "lab3_using_fields_in_searches.md",
             "lab4_basic_commands.md",
-            "lab5_transforming_commands.md",
-            "lab6_reports_dashboards.md",
-            "lab7_pivot_datasets.md",
-            "lab8_lookups.md",
-            "lab9_alerts.md"
+            "lab5_search_optimization.md",
+            "lab6_transforming_commands.md",
+            "lab7_reports_dashboards.md",
+            "lab8_pivot_datasets.md",
+            "lab9_lookups.md",
+            "lab10_alerts.md",
+            "lab11_capstone.md"
         ]
         self.required_data_files = [
             "access_30DAY.log",
@@ -171,11 +173,13 @@ class CourseValidator:
             "lab2_basic_searching.md": ["search", "timeline", "Boolean", "search history", "jobs"],
             "lab3_using_fields_in_searches.md": ["fields", "sidebar"],
             "lab4_basic_commands.md": ["commands", "table", "sort", "dedup"],
-            "lab5_transforming_commands.md": ["stats", "chart", "transforming"],
-            "lab6_reports_dashboards.md": ["reports", "dashboards", "visualizations"],
-            "lab7_pivot_datasets.md": ["pivot", "datasets"],
-            "lab8_lookups.md": ["lookups", "enrichment"],
-            "lab9_alerts.md": ["alerts", "scheduled", "actions"]
+            "lab5_search_optimization.md": ["best practice", "optimization", "wildcard", "job inspector"],
+            "lab6_transforming_commands.md": ["stats", "chart", "transforming"],
+            "lab7_reports_dashboards.md": ["reports", "dashboards", "visualizations"],
+            "lab8_pivot_datasets.md": ["pivot", "datasets"],
+            "lab9_lookups.md": ["lookups", "enrichment"],
+            "lab10_alerts.md": ["alerts", "scheduled", "actions"],
+            "lab11_capstone.md": ["capstone", "investigation", "correlat"]
         }
 
         # Read all presentation content

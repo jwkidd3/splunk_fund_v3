@@ -353,6 +353,57 @@ Confirm all three data sources are properly ingested and searchable.
 
 ---
 
+## Challenge Exercises
+
+### Challenge 1: Reconcile the Ingest
+
+Confirm that what Splunk indexed matches what you uploaded. Count the events per
+source type and compare them against the line counts of the source files.
+
+```spl
+index=main
+| stats count by sourcetype
+```
+
+Compare with `wc -l` on the three files in `labs/data/`.
+
+### Challenge 2: Confirm the Data Window
+
+Determine how many days the dataset actually spans, rather than assuming.
+
+```spl
+index=main
+| stats min(_time) as first, max(_time) as last
+| eval span_days=round((last-first)/86400,1)
+| eval first=strftime(first,"%Y-%m-%d"), last=strftime(last,"%Y-%m-%d")
+| table first, last, span_days
+```
+
+Why does the course use **Last 30 days** rather than a range matching the span?
+
+### Challenge 3: Verify Host Assignment
+
+Each source type should carry exactly one host value, set during upload. Prove it:
+
+```spl
+index=main
+| stats dc(host) as distinct_hosts, values(host) as host_value by sourcetype
+```
+
+If any source type shows more than one host, the upload was misconfigured.
+
+### Challenge 4: Check Ingestion Health
+
+Splunk logs its own activity. Look for problems recorded while your data loaded:
+
+```spl
+index=_internal sourcetype=splunkd log_level=ERROR
+| stats count by component
+| sort -count
+```
+
+---
+
 ## Troubleshooting Guide
 
 ### Common Issues and Solutions

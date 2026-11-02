@@ -27,7 +27,7 @@ from pathlib import Path
 DATA = Path(__file__).parent / "labs" / "data"
 
 # Query text that is deliberately not a course-data search
-SKIP_QUERY = ("index=_audit", "/services/", "should be", "both work")
+SKIP_QUERY = ("index=_audit", "index=_internal", "/services/", "should be", "both work")
 # Right-hand sides that are field names or aliases, not literal values
 SKIP_VALUE = {"productId", "product_name", "price", "ProductName", "Price",
               "now", "Default"}
@@ -118,22 +118,22 @@ def expected(access, db, products):
                                  for l in access if "action=addtocart" in l)
 
     return [
-        ("lab5", "best-selling product", sold.most_common(1)[0][0]),
-        ("lab5", "cart.do (status=200)", f"{files['cart.do']:,}"),
-        ("lab5", "success.do (status=200)", f"{files['success.do']:,}"),
-        ("lab5", "top IP by sessions", top_ip_sessions[1]),
-        ("lab5", "that IP's session count", f"{top_ip_sessions[0]:,}"),
-        ("lab5", "least-bandwidth file", min(bandwidth.items(), key=lambda x: x[1])[0]),
-        ("lab6", "top 403 IP", forbidden.most_common(1)[0][0]),
-        ("lab6", "that IP's 403 count", str(forbidden.most_common(1)[0][1])),
-        ("lab6", "total 403 events", f"{sum(forbidden.values()):,}"),
-        ("lab6", "units sold", f"{len(buy):,}"),
-        ("lab6", "cart additions", f"{len(re.findall('action=addtocart', blob)):,}"),
-        ("lab6", "purchases", f"{len(re.findall('action=purchase', blob)):,}"),
-        ("lab6", "unique sessions", f"{len(set().union(*sessions.values())):,}"),
-        ("lab7", "top carted product", carted.most_common(1)[0][0]),
-        ("lab8", "top revenue product", revenue.most_common(1)[0][0]),
-        ("lab8", "top revenue amount", f"{revenue.most_common(1)[0][1]:,.2f}"),
+        ("lab6", "best-selling product", sold.most_common(1)[0][0]),
+        ("lab6", "cart.do (status=200)", f"{files['cart.do']:,}"),
+        ("lab6", "success.do (status=200)", f"{files['success.do']:,}"),
+        ("lab6", "top IP by sessions", top_ip_sessions[1]),
+        ("lab6", "that IP's session count", f"{top_ip_sessions[0]:,}"),
+        ("lab6", "least-bandwidth file", min(bandwidth.items(), key=lambda x: x[1])[0]),
+        ("lab7", "top 403 IP", forbidden.most_common(1)[0][0]),
+        ("lab7", "that IP's 403 count", str(forbidden.most_common(1)[0][1])),
+        ("lab7", "total 403 events", f"{sum(forbidden.values()):,}"),
+        ("lab7", "units sold", f"{len(buy):,}"),
+        ("lab7", "cart additions", f"{len(re.findall('action=addtocart', blob)):,}"),
+        ("lab7", "purchases", f"{len(re.findall('action=purchase', blob)):,}"),
+        ("lab7", "unique sessions", f"{len(set().union(*sessions.values())):,}"),
+        ("lab8", "top carted product", carted.most_common(1)[0][0]),
+        ("lab9", "top revenue product", revenue.most_common(1)[0][0]),
+        ("lab9", "top revenue amount", f"{revenue.most_common(1)[0][1]:,.2f}"),
     ]
 
 
@@ -177,7 +177,7 @@ def main():
     print("\n🔑 Answer-key values")
     lab_text = {p.name: p.read_text() for p in Path("labs").glob("*.md")}
     for lab, label, value in expected(access, db, products):
-        found = any(value in t for name, t in lab_text.items() if name.startswith(lab))
+        found = any(value in t for name, t in lab_text.items() if name.startswith(lab + "_"))
         if found:
             print(f"  ✓ {lab}: {label} = {value}")
         else:

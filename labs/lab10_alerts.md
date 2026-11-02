@@ -1,4 +1,4 @@
-# Lab 9: Creating Alerts in Splunk
+# Lab 10: Creating Alerts in Splunk
 
 ⚠️ **WARNING**: This lab requires a Splunk Enterprise trial or paid license. It will not work with the free license version.
 

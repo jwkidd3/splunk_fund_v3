@@ -1,4 +1,4 @@
-# Lab 7: Using Pivot and Datasets in Splunk
+# Lab 8: Using Pivot and Datasets in Splunk
 
 ## Lab Overview
 
@@ -50,7 +50,7 @@ Required sourcetypes:
 
 ### Step 2: Verify Dashboard
 
-Ensure the Sales Dashboard from Lab 6 exists:
+Ensure the Sales Dashboard from Lab 7 exists:
 1. Navigate to **Dashboards**
 2. Look for "Sales Dashboard"
 3. If missing, create a new dashboard with this name
@@ -408,7 +408,7 @@ To clean up after this lab:
 
 ## Next Steps
 
-- Proceed to Lab 8: Creating and Using Lookups
+- Proceed to Lab 9: Creating and Using Lookups
 - Explore data model creation and acceleration
 - Learn about Pivot table calculations and formatting
 

@@ -197,6 +197,12 @@ class SPLDataValidator:
 
         return 'unknown'
 
+    # Searches that are wrong on purpose, used as troubleshooting exercises.
+    # Each entry is (lab file stem, the field the student is meant to spot).
+    INTENTIONAL_ERRORS = {
+        ("lab5_search_optimization", "Status"),   # Exercise 7.1: field names are case sensitive
+    }
+
     def validate_spl_query(self, lab_file: str, line_num: int, spl: str) -> bool:
         """Validate a single SPL query"""
         is_valid = True
@@ -206,6 +212,12 @@ class SPLDataValidator:
 
         # Skip validation for lookup-only queries
         if 'inputlookup' in spl and 'index=' not in spl:
+            return True
+
+        # Splunk's internal indexes are managed by Splunk, not by the course
+        # data files, so their fields are not ours to validate.
+        if any(idx in spl for idx in ('index=_internal', 'index=_audit',
+                                      'index=_introspection')):
             return True
 
         # Skip validation if no specific sourcetype and using generic queries
@@ -274,6 +286,10 @@ class SPLDataValidator:
                     if field in aliases and canonical in valid_fields:
                         is_alias = True
                         break
+
+                # a search that is wrong on purpose is not a defect in the course
+                if not is_alias and (Path(lab_file).stem, field) in self.INTENTIONAL_ERRORS:
+                    continue
 
                 if not is_alias:
                     self.add_error(

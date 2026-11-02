@@ -199,6 +199,57 @@ This lab uses the following data types:
 - [ ] Accessed and managed job history
 - [ ] Shared search results appropriately
 
+## Challenge Exercises
+
+### Challenge 1: Combine Boolean Operators
+
+Find requests that failed with either a client error or a server error, but
+exclude the noisiest client, using a single search:
+
+```spl
+index=main sourcetype=access_combined_wcookie (status=404 OR status=500) NOT clientip=92.46.53.223
+| stats count by status
+```
+
+Then rewrite it using only inclusion. Which form would you prefer, and why?
+
+### Challenge 2: Find the Rarest Outcome
+
+Use `rare` rather than `top` to find the least common status code:
+
+```spl
+index=main sourcetype=access_combined_wcookie
+| rare limit=3 status
+```
+
+Does the least common status mean the least important one?
+
+### Challenge 3: Phrase Searching
+
+The Linux secure log records the SSH port in its text. Count the events
+mentioning it:
+
+```spl
+index=main sourcetype=linux_secure "port 22"
+| stats count
+```
+
+Now try `port 22*`. Explain any difference in the result.
+
+### Challenge 4: Time Range as a Filter
+
+Run the same search over three ranges — **Last 24 hours**, **Last 7 days** and
+**Last 30 days** — and record the counts:
+
+```spl
+index=main sourcetype=access_combined_wcookie
+| stats count
+```
+
+What does the pattern tell you about how the dataset is distributed?
+
+---
+
 ## Key Concepts Summary
 
 ### Search Language Basics

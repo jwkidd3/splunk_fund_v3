@@ -1,4 +1,4 @@
-# Lab 5: Transforming Commands in Splunk
+# Lab 6: Transforming Commands in Splunk
 
 ## Lab Overview
 
@@ -83,7 +83,7 @@ Throughout this lab, you'll work with these key fields:
 |------------|------------|
 | access_combined_wcookie | action, bytes, categoryId, clientip, JSESSIONID, productId, referer, status, file |
 | db_audit | Command, Duration, Type |
-| linux_secure | raw syslog text — extract `user` / `src_ip` with `rex` (see Lab 6) |
+| linux_secure | raw syslog text — extract `user` / `src_ip` with `rex` (see Lab 7) |
 
 ---
 
@@ -448,7 +448,7 @@ No cleanup required for this lab as we're only running searches, not creating an
 
 ## Next Steps
 
-- Proceed to Lab 6: Creating Reports and Dashboards
+- Proceed to Lab 7: Creating Reports and Dashboards
 - Practice combining these commands with visualization
 - Explore additional stats functions like stdev, median, and mode
 

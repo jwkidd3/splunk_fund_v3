@@ -380,11 +380,13 @@ This lab covered fundamental Splunk commands for data manipulation and reporting
 
 ### Coming Up in Content 2
 Content 2 will focus on advanced analysis and reporting:
-- **Lab 5**: Transforming Commands (statistical analysis)
-- **Lab 6**: Reports and Dashboards (visualization)
-- **Lab 7**: Pivot and Datasets (business user tools)
-- **Lab 8**: Lookups (data enrichment)
-- **Lab 9**: Alerts (proactive monitoring)
+- **Lab 5**: Search Optimization and Troubleshooting (making searches fast)
+- **Lab 6**: Transforming Commands (statistical analysis)
+- **Lab 7**: Reports and Dashboards (visualization)
+- **Lab 8**: Pivot and Datasets (business user tools)
+- **Lab 9**: Lookups (data enrichment)
+- **Lab 10**: Alerts (proactive monitoring)
+- **Lab 11**: Capstone — end-to-end investigation
 
 ## Solutions Section
 
