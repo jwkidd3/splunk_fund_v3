@@ -9,7 +9,7 @@ By completing this lab, you will:
 - Verify successful data ingestion
 
 ## Prerequisites
-- Access to Splunk Enterprise instance (provided)
+- A running Splunk instance — see **Lab Environment Setup** below if you do not have one
 - Administrative access to Splunk Web interface
 - Lab data files (already provided in data folder)
 
@@ -29,13 +29,79 @@ By completing this lab, you will:
 
 ---
 
+## Lab Environment Setup
+
+If your instructor has already provided a running Splunk instance, confirm you can
+reach it with **Step 3** below and then continue to Task 1. Otherwise, set one up
+using **Option A** (works with no network) or **Option B** (needs internet).
+
+### Step 1: Start Splunk
+
+#### Option A: Splunk in Docker (recommended; works offline)
+
+1. Confirm Docker is running:
+   ```bash
+   docker info
+   ```
+
+2. Confirm the Splunk image is already on this machine:
+   ```bash
+   docker images splunk/splunk
+   ```
+   If that prints nothing, pull it **while you still have internet** (~6.5 GB,
+   so do not leave this until class time):
+   ```bash
+   docker pull --platform linux/amd64 splunk/splunk:latest
+   ```
+
+3. Start the container:
+   ```bash
+   docker run -d -p 8000:8000 -e SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com -e SPLUNK_START_ARGS=--accept-license --platform linux/amd64 -e "SPLUNK_PASSWORD=password" --name splunk splunk/splunk:latest
+   ```
+
+   If a `splunk` container already exists from a previous session, start that one
+   instead of creating a second:
+   ```bash
+   docker start splunk
+   ```
+
+4. Splunk takes a few minutes to come up on first start. Wait until the status
+   column reads `healthy`:
+   ```bash
+   docker ps --filter name=splunk
+   ```
+
+#### Option B: Splunk Cloud trial (requires internet)
+
+Request a free trial instance at
+<https://www.splunk.com/en_us/download/splunk-cloud.html>. You will choose your
+own password during signup; use that instead of the one listed above.
+
+> **Not suitable for an offline classroom.** Splunk Cloud is hosted, so every
+> search needs a live connection. Use Option A if the room may be offline.
+
+### Step 2: Confirm the data files are present
+
+The three log files live in the course materials under `labs/data/`. Task 1
+walks through verifying them in detail.
+
+### Step 3: Verify access
+
+1. Open `http://localhost:8000` (Docker) or your Splunk Cloud URL
+2. Log in — for Docker, username `admin` and password `password`
+3. Confirm **Settings** appears in the top menu, which indicates admin rights
+
+**Checkpoint:** Splunk Web loads and you are logged in as an administrator.
+
+---
+
 ## Scenario
 You have recently joined the team at Buttercup Games as a Splunk Administrator. Your first assignment is to ingest three critical data sources into your Splunk Enterprise instance for security monitoring and analysis:
 1. Web application access logs
 2. Linux secure logs from web servers
 3. Database audit logs
 
-These datasets cover 30 days of historical data that will be used for training and analysis purposes.
+These datasets cover roughly 26 days of historical data that will be used for training and analysis purposes.
 
 ---
 
@@ -56,7 +122,7 @@ The lab data files are already provided in your course materials folder for this
    - `products.csv` (Product lookup data for later labs)
 
 3. **Note about the data:**
-   - These files contain 30 days of historical data
+   - These files contain roughly 26 days of historical data
    - The data is static (not real-time) for training purposes
    - You will use these same files throughout the course
 
@@ -360,7 +426,7 @@ If you need to reset your environment later:
 
 ## Additional Notes
 
-- The data loaded in this lab represents 30 days of historical data
+- The data loaded in this lab represents roughly 26 days of historical data
 - These datasets will be used throughout the course
 - Real-time data ingestion will be covered in advanced courses
 - Keep note of the host values you assigned - you'll need them in future labs
